@@ -1,6 +1,6 @@
 
 def day_7():
-    file = open('20211207.txt', 'r')
+    file = open('7.txt', 'r')
     positions = []
     for line in file:
         positions = [int(l) for l in line.strip().split(",")]

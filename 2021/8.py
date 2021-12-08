@@ -35,12 +35,6 @@ def day_8_2():
         line_str = re.split(r"\|", line.strip())
         input0.append(list(filter(None, re.split(r"\s", line_str[0]))))
         input.append(list(filter(None, re.split(r"\s", line_str[1]))))
-    #1, 4, 7, and 8
-    easy_len = [2, 4, 3, 7]
-    len_5 = [2, 3, 5]
-    len_6 = [0, 6, 9]
-    chars = "abcdefg"
-    easy_count = 0
     sum = 0
     for row, res in zip(input0, input):
         mapper = {}
@@ -89,5 +83,4 @@ def day_8_2():
         sum += val
     print(sum)
 
-    
 day_8_2()

@@ -5,7 +5,7 @@ def day_11():
     for line in file:
         line = [int(l) for l in list(line.strip())]
         input.append(line)
-    grid = {}
+    grid = {} # Energy levels
     for x in range(len(input)):
         for y in range(len(input)):
             grid[x, y] = input[x][y]
@@ -16,9 +16,8 @@ def day_11():
     part2_s = 0
     for s in range(steps * 10):
         count_flashes_step = 0
-        for x in range(len(input)):
-            for y in range(len(input)):
-                grid[x, y] = grid[x, y] + 1
+        for coo in grid:
+            grid[coo] = grid[coo] + 1
         x = 0
         while x < len(input):
             y = 0

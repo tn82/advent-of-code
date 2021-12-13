@@ -1,23 +1,19 @@
+from operator import itemgetter
 
 def day_13():
     file = open('13.txt', 'r')
-    empty_found = False
-    input = []
+    grid = {}
     cuts = []
     for line in file:
-        s = line.strip().split(",")
-        if not s[0]:
-            empty_found = True
+        row = line.strip().split(",")
+        if not row[0]:
             continue
-        if empty_found:
-            s1 = s[0].replace('fold along ', '')
-            cuts.append(s1.split("="))
+        if len(row) == 1:
+            cut = row[0].replace('fold along ', '').split("=")
+            cuts.append(cut)
         else:
-            row = [int(l) for l in list(s)]
-            input.append(row)
-    grid = {}
-    for coo in input:
-        grid[tuple(coo)] = 1
+            coo = [int(i) for i in row]
+            grid[tuple(coo)] = 1
 
     for cut in cuts:
         grid_cut = {}
@@ -36,11 +32,20 @@ def day_13():
                     grid_cut[c * 2 - coo[0], coo[1]] = 1
         grid = grid_cut
     print(f"Part one: {len(grid)}")
-    plot2 = [["0"] * 40 for _ in range(40)]
+
+    max_x = max(grid, key=itemgetter(0))[0]
+    max_y = max(grid, key=itemgetter(1))[1]
+    plot = [["."] * (max_x + 1) for _ in range(max_y + 1)]
+    print(f"Part two:")
+    x = []
+    y = []
     for coo in grid:
-        if coo[0] > 9+20:
-            plot2[coo[1]][coo[0] - 30] = "#"
-    print(plot2)
-    print(f"Part two: {0}")
+        y.append(-coo[1])
+        x.append(coo[0])
+        plot[coo[1]][coo[0]] = "#"
+    for row in plot:
+        for val in row:
+            print(val, end='')
+        print()
 
 day_13()

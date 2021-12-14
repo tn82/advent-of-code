@@ -3,7 +3,6 @@ import string
 
 def day_14():
     file = open('14_test.txt', 'r')
-    grid = {}
     state = ""
     input = []
     first = True
@@ -15,7 +14,7 @@ def day_14():
             row = line.strip().split(" -> ")
             input.append(row)
     
-    for step in range(10):
+    for _ in range(10):
         hits = {}
         for instruction in input:
             i = 0
@@ -28,8 +27,7 @@ def day_14():
                     break
         for idx, instruc in sorted(hits.items(), key=lambda item: item[0], reverse=True):
             state = state[:idx] + instruc + state[idx:]
-        print(len(state))
-        
+
     min = 10000000
     max = 0
     state_set = set()
@@ -43,7 +41,6 @@ def day_14():
             min = c1
 
     print(f"Part one: {max - min}")  #3048 correct
-    print("Part two:")
 
 from collections import defaultdict
 def day_14_2():
@@ -65,8 +62,7 @@ def day_14_2():
         if i > len(state) - 2:
             break
         combos[state[i] + state[i + 1]] += 1
-    for step in range(40):
-        hits = {}
+    for _ in range(40):
         combos_tmp = defaultdict(int)
         for instruction in input:
             if instruction[0] in combos:
@@ -76,17 +72,9 @@ def day_14_2():
                 combos_tmp[new2] += combos[instruction[0]]
                 combos[instruction[0]] = 0
         combos.update(combos_tmp)
-        #for idx, instruc in sorted(hits.items(), key=lambda item: item[0], reverse=True):
-        #    state = state[:idx] + instruc + state[idx:]
-        #print(len(state))
 
     for k, v in combos.items():
         c_d[k[0]] += v
-        #c_d[k[1]] += v
-    #list [v for k, v in c_d.items()]
-    for k, v in sorted(c_d.items(), key=lambda item: item[1], reverse=True):
-        print(k, v)
-
-
-    print(f"Part two: {max(c_d, key=c_d.get())}, {min(c_d, key=c_d.get())}, {max(c_d, key=c_d.get()) - min(c_d, key=c_d.get())}")
+    print(f"Part two: {max(c_d.values())}, {min(c_d.values())}, {max(c_d.values()) - min(c_d.values())}")
+    #3288891573057 correct
 day_14_2()

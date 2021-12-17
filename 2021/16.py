@@ -53,47 +53,21 @@ def calc_pack(b):
             value = 1 if values[0] < values[1] else 0
         if type_id == 7:
             value = 1 if values[0] == values[1] else 0
-
         return version, value, b
 
-    
 def day_16():
     file = open('16.txt', 'r')
-    grid = {}
     input = []
     for line in file:
-        #input.append(bin(int(line.strip(), 16))[2:])
         input.append(line.strip())
         break
-    binary =""
-    hex = {}
-    hex['0'] = '0000'
-    hex['1'] = '0001'
-    hex['2'] = '0010'
-    hex['3'] = '0011'
-    hex['4'] = '0100'
-    hex['5'] = '0101'
-    hex['6'] = '0110'
-    hex['7'] = '0111'
-    hex['8'] = '1000'
-    hex['9'] = '1001'
-    hex['A'] = '1010'
-    hex['B'] = '1011'
-    hex['C'] = '1100'
-    hex['D'] = '1101'
-    hex['E'] = '1110'
-    hex['F'] = '1111'
-    #input[0] = "9C0141080250320F1802104A08"
-    #input[0] = "A0016C880162017C3686B18A3D4780"
-    #input[0] = "EE00D40C823060"
-    #input[0] = "38006F45291200"
-    #input[0] = "EE00D40C823060"
+
+    binary = ""
     for c in input[0]:
-        binary += hex[c]
-    i = 0
-    version_sum, binary_rest = calc_pack(binary)
-    
-    version_sum, value, binary_rest = calc_pack2(binary)
+        # Remove first 2 chars from bin "0b". Fill up to 4 bits as described in the problem.
+        binary += bin(int(c, 16))[2:].zfill(4)
+
+    version_sum, value, _ = calc_pack(binary)
     print("Part 1:", version_sum)
     print("Part 2:", value)
 day_16()

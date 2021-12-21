@@ -2,10 +2,7 @@
 import itertools
 
 def intersection12(l1, l2):
-    return [v for v in l2 if v in l1]
-    if len(inter) > 11:
-        return True
-    return False
+    return set(l1).intersection(l2)
 
 def normalize(grid, b_norm):
     grid_norm = []
@@ -15,7 +12,6 @@ def normalize(grid, b_norm):
 
 def day_19():
     file = open('19.txt', 'r')
-    #file = open('19.txt', 'r')
     grids = []
     myline = file.readline()
     while myline:
@@ -38,7 +34,7 @@ def day_19():
     search_grids = {0: grids[0][:]}
     found = set()
     found.add(0)
-    map_b = {}
+    distanceb = [[0,0,0]]
     while len(found) < len(grids):
         found_inner = set()
         for i, _ in enumerate(grids):
@@ -49,14 +45,12 @@ def day_19():
             for bi in gridi:
                 gridi_norm = normalize(gridi, bi)
                 for j, gridj in enumerate(grids):
-                    if i == j or j == 0 or j in found:# or (i == 0 and j ==4):
+                    if i == j or j == 0 or j in found:
                         continue
                     for perm in range(6): #itertools.permutations(b):
                         for flip in flips:
                             if j in found:
                                 continue
-                            #if flip == [1, -1, -1] and perm == 3:
-                            #    continue
                             gridj_fliped = []
                             for b in gridj:
                                 perm_b = list(itertools.permutations(b))[perm]
@@ -66,30 +60,26 @@ def day_19():
                                 gridj_norm = normalize(gridj_fliped, b)
                                 inter = intersection12(gridi_norm, gridj_norm)
                                 if len(inter) > 11:
-                                    if not j in map_b:
-                                        map_b[j] = {}
-                                    #map_b[j][i] = bi
                                     found.add(j)
                                     found_inner.add(j)
                                     gridj_norm = normalize(gridj_norm, (-bi[0], -bi[1], -bi[2]))
                                     inter = normalize(inter, (-bi[0], -bi[1], -bi[2]))
-                                    #ix = j
-                                    #while ix != 0:
-                                    #    bx = list(map_b[ix].values())[0]
-                                    #    gridj_norm = normalize(gridj_norm, (-bx[0], -bx[1], -bx[2]))
-                                    #    inter = normalize(inter, (-bx[0], -bx[1], -bx[2]))
-                                    #    ix = list(map_b[ix].keys())[0]
                                     global_grid.extend(gridj_norm)
                                     global_grid = list(set(global_grid)) # duplicates
                                     global_grid.sort()
-                                    #search_grids[j] = gridj_fliped[:]
                                     search_grids[j] = gridj_norm[:]
+                                    distanceb.append([bi[0]-b[0], bi[1]-b[1], bi[2]-b[2]])
                                     break
                 #break # after first bi
         if not found_inner:
             break
-    #global_grid = list(set(global_grid)) # duplicates
-    print(len(global_grid)) # 666 too high
-    #print(global_grid) 
+    print(len(global_grid)) # 666 too high 390 correct
+    max_distance = 0
+    for di in distanceb:
+        for dj in distanceb:
+            dist = abs(di[0] - dj[0]) + abs(di[1] - dj[1]) + abs(di[2] - dj[2])
+            if dist > max_distance:
+                max_distance = dist
+    print(max_distance)
 
 day_19()

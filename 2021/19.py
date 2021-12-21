@@ -41,7 +41,7 @@ def day_19():
             if i not in found:
                 continue
             gridi = search_grids[i]
-            print(found)
+            #print(found)
             for bi in gridi:
                 gridi_norm = normalize(gridi, bi)
                 for j, gridj in enumerate(grids):
@@ -62,6 +62,7 @@ def day_19():
                                 if len(inter) > 11:
                                     found.add(j)
                                     found_inner.add(j)
+                                    print("i,j",i,j)
                                     gridj_norm = normalize(gridj_norm, (-bi[0], -bi[1], -bi[2]))
                                     inter = normalize(inter, (-bi[0], -bi[1], -bi[2]))
                                     global_grid.extend(gridj_norm)

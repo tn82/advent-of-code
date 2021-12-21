@@ -2,9 +2,8 @@
 import itertools
 
 def intersection12(l1, l2):
-    inter = [v for v in l1 if v in l2]
+    return [v for v in l2 if v in l1]
     if len(inter) > 11:
-        print(inter)
         return True
     return False
 
@@ -15,7 +14,7 @@ def normalize(grid, b_norm):
     return grid_norm
 
 def day_19():
-    file = open('19_test.txt', 'r')
+    file = open('19.txt', 'r')
     #file = open('19.txt', 'r')
     grids = []
     myline = file.readline()
@@ -35,29 +34,29 @@ def day_19():
                     break
         myline = file.readline()
     flips = [[1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]]
-    #delta_first = calc_delta(grids[0])
-    grid0_norm = normalize(grids[0], grids[0][0])
-    global_grid = grid0_norm[:]
-    search_grids = [grid0_norm[:]]
+    global_grid = grids[0][:]
+    search_grids = {0: grids[0][:]}
     found = set()
     found.add(0)
+    map_b = {}
     while len(found) < len(grids):
         found_inner = set()
-        for i, gridi in enumerate(search_grids):
+        for i, _ in enumerate(grids):
+            if i not in found:
+                continue
+            gridi = search_grids[i]
+            print(found)
             for bi in gridi:
                 gridi_norm = normalize(gridi, bi)
-                #gridi_norm = normalize(gridi, (-618,-824,-621))
                 for j, gridj in enumerate(grids):
                     if i == j or j == 0 or j in found:# or (i == 0 and j ==4):
                         continue
                     for perm in range(6): #itertools.permutations(b):
                         for flip in flips:
-                            #if perm == 3 and flip == [-1, -1, 1]:
+                            if j in found:
+                                continue
+                            #if flip == [1, -1, -1] and perm == 3:
                             #    continue
-                            #gridi_norm = normalize(gridi, gridi[0])
-                            #for j, gridj in enumerate(grids):
-                            #    if i == j or j == 0: #or j in found:
-                            #        continue
                             gridj_fliped = []
                             for b in gridj:
                                 perm_b = list(itertools.permutations(b))[perm]
@@ -65,20 +64,32 @@ def day_19():
                                 gridj_fliped.append(perm_b)
                             for b in gridj_fliped:
                                 gridj_norm = normalize(gridj_fliped, b)
-                                if intersection12(gridi_norm, gridj_norm):
+                                inter = intersection12(gridi_norm, gridj_norm)
+                                if len(inter) > 11:
+                                    if not j in map_b:
+                                        map_b[j] = {}
+                                    #map_b[j][i] = bi
                                     found.add(j)
                                     found_inner.add(j)
-                                    #gridj_norm = normalize(gridj_norm, grids[0][0])
                                     gridj_norm = normalize(gridj_norm, (-bi[0], -bi[1], -bi[2]))
-                                    #gridj_norm = normalize(gridj_norm, grids[0][0])
+                                    inter = normalize(inter, (-bi[0], -bi[1], -bi[2]))
+                                    #ix = j
+                                    #while ix != 0:
+                                    #    bx = list(map_b[ix].values())[0]
+                                    #    gridj_norm = normalize(gridj_norm, (-bx[0], -bx[1], -bx[2]))
+                                    #    inter = normalize(inter, (-bx[0], -bx[1], -bx[2]))
+                                    #    ix = list(map_b[ix].keys())[0]
                                     global_grid.extend(gridj_norm)
                                     global_grid = list(set(global_grid)) # duplicates
-                                    search_grids.append(gridj_norm[:])
+                                    global_grid.sort()
+                                    #search_grids[j] = gridj_fliped[:]
+                                    search_grids[j] = gridj_norm[:]
                                     break
+                #break # after first bi
         if not found_inner:
             break
     #global_grid = list(set(global_grid)) # duplicates
-    print(len(global_grid))
-    print(global_grid)
+    print(len(global_grid)) # 666 too high
+    #print(global_grid) 
 
 day_19()

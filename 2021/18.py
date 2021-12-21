@@ -1,15 +1,10 @@
-from collections import defaultdict
 from math import floor, ceil
 
 def add_row(r1, r2):
     return "[" + r1 + "," + r2 + "]"
 
-def get_int(s, i):
-    return int(s[i]), s[:i] + s[i+1:]
-
 def remove(s, i):
     s = s[:i] + s[i+1:]
-    #print(s)
     return s
 
 def find_left_reg(s, end):
@@ -45,9 +40,6 @@ def find_split(s):
     return (-1 if i == 10000 else i), int(split)
 
 def add_int(s, dest, src):
-    #if dest == -1:
-    #    s = s[:src] + str(0) + s[src + 1:]
-    #else:
     if dest != -1:
         src_int = s[src]
         if s[src+1].isdigit():
@@ -126,7 +118,6 @@ def explode_old(s): # Not good
     return did_explode, s
 
 def explode(s):
-    #print(s)
     level4 = [v for v in nested(s) if v[0] == 4]
     if level4:
         right = level4[0][1]
@@ -147,36 +138,20 @@ def split(s):
         le = floor(val / 2.0)
         re = ceil(val / 2.0)
         s = s[:idx] + "[" + str(le) + "," + str(re) + "]" + s[idx:]
-        #print(s)
         return True, s
     return False, s
 
-def day_18():
-    file = open('18.txt', 'r')
-    input = []
-    for line in file:
-        row = line.strip()
-        input.append(row)
-    s = '[[[[[9,8],1],2],3],4]' # ok
-    s = '[7,[6,[5,[4,[3,2]]]]]' # ok
-    s = '[[6,[5,[4,[3,2]]]],1]' # ok
-    s = '[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]'
-    s1 = '[[[[4,3],4],4],[7,[[8,4],9]]]'
-    s2 = '[1,1]'
-    s = add_row(s1, s2)
-    s = input[0]
-    i = 1
-    for i in range(1, len(input)):
-        s = add_row(s, input[i])
-        while True:
-            ex = True
-            while ex:
-                ex, s = explode(s)
-            spl, s = split(s)
-            if not spl and not ex:
-                break
-    for l in range(3,-1, -1):
-        for b in [v for v in nested(s) if v[0] == l]:
+def calc_sum(s):
+    origs = s
+    nest = list(nested(s))
+    lvel = 3
+    while True:
+        if s.isdigit():
+            break
+        l = max([v[0] for v in nested(s)])
+        inner_nest = list(nested(s))
+        lev = [v for v in nested(s) if v[0] == l]
+        for b in lev:
             v1 = b[2][0]
             i = 1
             while True:
@@ -194,19 +169,40 @@ def day_18():
                 else:
                     break
             val = int(v1)*3 + int(v2)*2
-            s = s.replace("["+b[2]+"]", str(val), 1)
+            brack = s.rfind("[", 0, b[1])
+            ss = s[:max(brack-1,0)]
+            se = s[max(brack-1,0):]
+            s = ss + se.replace("["+b[2]+"]", str(val), 1)
+    return int(s)
+
+def the_rules(s1, s2):
+    s = add_row(s1, s2)
+    while True:
+        ex = True
+        while ex:
+            ex, s = explode(s)
+        spl, s = split(s)
+        if not spl and not ex:
+            return s
+
+def day_18():
+    file = open('18.txt', 'r')
+    input = []
+    for line in file:
+        row = line.strip()
+        input.append(row)
+    s = input[0]
+    for i in range(1, len(input)):
+        s = the_rules(s, input[i])
+    print(calc_sum(s))
     
-    print(s)
-    #for c in row:
-    #    row1find
+    max_mag = 0
+    for rowi in input:
+        for rowj in input:
+            s = the_rules(rowi, rowj)
+            mag = calc_sum(s)
+            if mag > max_mag:
+                max_mag = mag
+    print(max_mag) # 4624 correct
+
 day_18()
-
-
-
-def day_18_2():
-    row1 = '[[[[0,7],4],[7,[[8,4],[6,3]]]],[1,1]]'
-    #row1 = '[[[[4,9],[1,2]],[[0,0],[1,6]]],[[5,6],[[8,4],[5,7]]]]'
-    s = set()
-    l = [v for v in nested(row1) if v[0] == 4]
-    print(l)
-#day_18_2()

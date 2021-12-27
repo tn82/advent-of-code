@@ -19,7 +19,7 @@ def movep(p_start, p_end, steps, grid):
 def coo_good(coo, v, grid):
     if coo[0] != dest[v[0]]:
         return False
-    for i in range(coo[1]+1, 3):
+    for i in range(coo[1]+1, 5):
         if (coo[0], i) not in grid or grid[coo[0], i][0] != v[0]:
             return False
     return True
@@ -29,13 +29,13 @@ def coo_good_to_move(coo, v, grid):
     for x in range(coo[0]+offset, dest[v[0]], offset):
         if (x, 0) in grid: # blocked
             return False
-    for i in range(1, 3):
+    for i in range(1, 5):
         if (dest[v[0]], i) in grid and grid[dest[v[0]], i][0] != v[0]:
             return False
     return True
 
 def first_empty(v, grid):
-    for i in range(2, 0, -1):
+    for i in range(4, 0, -1):
         if (dest[v], i) not in grid:
             return i
     return -1
@@ -126,11 +126,6 @@ def all_good(grid):
     return True
 
 def day():
-    grid = {}
-    #for i in range(11):
-    #    grid[i, 0] = "-" if i in (2,4,6,8) else "."
-        #grid[i, 0] = "."
-
     #prod
     #part 1
     grid = {}
@@ -144,7 +139,7 @@ def day():
     grid[8,2] = ["C", 0,0]
     
     #part 2
-    '''
+    
     grid = {}
     grid[2,1] = ["B", 0,0]
     grid[2,2] = ["D", 0,0]
@@ -162,19 +157,7 @@ def day():
     grid[8,2] = ["A", 0,0]
     grid[8,3] = ["C", 0,0]
     grid[8,4] = ["C", 0,0]
-    '''
-    
-    #Test
-    #grid2 = {}
-    #grid2[2,1] = ["B", 0,0]
-    #grid2[2,2] = ["A", 0,0]
-    #grid2[4,1] = ["C", 0,0]
-    #grid2[4,2] = ["D", 0,0]
-    #grid2[6,1] = ["B", 0,0]
-    #grid2[6,2] = ["C", 0,0]
-    #grid2[8,1] = ["D", 0,0]
-    #grid2[8,2] = ["A", 0,0]
-    
+
     costs = [0]
     max_costs = [0]
     grids = [grid]
@@ -198,7 +181,7 @@ def day():
                     final_cost.append(c1)
                     print(f"Cost: {c1}")
                 else:
-                    if c1 <= 11417 and g1 not in many_grids:
+                    if g1 not in many_grids:
                         many_grids.append(g1)
                         many_costs.append(c1)
                         many_max_costs.append(max_c1)
@@ -207,6 +190,6 @@ def day():
         grids = many_grids
         costs = many_costs
         max_costs = many_max_costs
-    print(min(final_cost)) # 11417 correct
+    print(min(final_cost)) # 11417 correct 49529 correct
 
 day()

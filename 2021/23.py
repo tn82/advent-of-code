@@ -12,13 +12,35 @@ dest["D"] = 8
 def movep(p_start, p_end, steps, grid):
     grid[p_end] = grid.pop(p_start)
     grid[p_end][2] += 1
-    #max_energy = 0 if grid[p_end][2] == 2 else energy[grid[p_end][0]]*(abs(p_start[0] - dest[grid[p_end][0]]) + 1)
     max_energy = energy[grid[p_end][0]]*(abs(p_start[0] - dest[grid[p_end][0]]) + 1)
     ener = energy[grid[p_end][0]]*steps
     return grid, ener, max_energy+ener
 
+def coo_good(coo, v, grid):
+    if coo[0] != dest[v[0]]:
+        return False
+    for i in range(coo[1]+1, 3):
+        if (coo[0], i) not in grid or grid[coo[0], i][0] != v[0]:
+            return False
+    return True
+
+def coo_good_to_move(coo, v, grid):
+    offset = 1 if coo[0] < dest[v[0]] else -1
+    for x in range(coo[0]+offset, dest[v[0]], offset):
+        if (x, 0) in grid: # blocked
+            return False
+    for i in range(1, 3):
+        if (dest[v[0]], i) in grid and grid[dest[v[0]], i][0] != v[0]:
+            return False
+    return True
+
+def first_empty(v, grid):
+    for i in range(2, 0, -1):
+        if (dest[v], i) not in grid:
+            return i
+    return -1
 startp = (0, 1, 3, 5, 7, 9, 10)
-finalp = ((2,1),(2,2), (4,1),(4,2), (6,1),(6,2), (8,1),(8,2))
+
 def moves(grid, cost, max_cost):
     grids = []
     costs = []
@@ -26,27 +48,18 @@ def moves(grid, cost, max_cost):
     for coo, v in grid.items():
         if (coo[0], coo[1]-1) in grid: # blocked
             continue
-        if (coo[0] == dest[v[0]] and coo[1] == 2): # Already good
-            continue
-        if (coo[0] == dest[v[0]] and coo[1] == 1 and grid[coo[0], 2][0] == v[0]): # Already good
+        if coo_good(coo, v, grid): # Already good
             continue
         if v[2] == 0: # First move
-            if ((dest[v[0]], 2) not in grid and (dest[v[0]], 1) not in grid) or ((dest[v[0]], 1) not in grid and grid[dest[v[0]], 2][0] == v[0]):
-                breaker = False
-                offset = 1 if coo[0] < dest[v[0]] else -1
-                for x in range(coo[0], dest[v[0]]+offset, offset):
-                    if (x, 0) in grid: # blocked
-                        breaker = True
-                        break
-                if not breaker:
-                    gridm = copy.deepcopy(grid)
-                    deep = 1 if (dest[v[0]], 2) in grid else 2
-                    steps = coo[1] + deep + abs(coo[0] - dest[v[0]])
-                    gridm, costm, max_costm = movep(coo, (dest[v[0]], deep), steps, gridm)
-                    grids.append(gridm)
-                    costs.append(cost+costm)
-                    max_costs.append(max_cost+max_costm)
-                    continue
+            if coo_good_to_move(coo, v, grid):
+                gridm = copy.deepcopy(grid)
+                deep = first_empty(v[0], grid)
+                steps = coo[1] + deep + abs(coo[0] - dest[v[0]])
+                gridm, costm, max_costm = movep(coo, (dest[v[0]], deep), steps, gridm)
+                grids.append(gridm)
+                costs.append(cost+costm)
+                max_costs.append(max_cost+max_costm)
+                continue
             for m in startp: # start moves
                 breaker = False
                 offset = 1 if coo[0] < m else -1
@@ -63,25 +76,14 @@ def moves(grid, cost, max_cost):
                 costs.append(cost+costm)
                 max_costs.append(max_cost+max_costm)
         if v[2] == 1: # Final move
-            offset = 1 if coo[0] < dest[v[0]] else -1
-            for x in range(coo[0] + offset, dest[v[0]], offset):
-                if (x, 0) in grid: # blocked
-                    continue
-            if (dest[v[0]], 1) in grid:
-                continue
-            if (dest[v[0]], 2) in grid and grid[dest[v[0]], 2][0] != v[0]:
-                continue
-            if (dest[v[0]], 2) in grid:
+            if coo_good_to_move(coo, v, grid):
                 gridm = copy.deepcopy(grid)
-                steps = 1 + abs(coo[0] - dest[v[0]])
-                gridm, costm, max_costm = movep(coo, (dest[v[0]], 1), steps, gridm)
-            else:
-                gridm = copy.deepcopy(grid)
-                steps = 2 + abs(coo[0] - dest[v[0]])
-                gridm, costm, max_costm = movep(coo, (dest[v[0]], 2), steps, gridm)
-            grids.append(gridm)
-            costs.append(cost+costm)
-            max_costs.append(cost+costm)
+                deep = first_empty(v[0], grid)
+                steps = deep + abs(coo[0] - dest[v[0]])
+                gridm, costm, max_costm = movep(coo, (dest[v[0]], deep), steps, gridm)
+                grids.append(gridm)
+                costs.append(cost+costm)
+                max_costs.append(cost+costm)
     return grids, costs, max_costs
 
 def moves_rec(grid, cost, path=[]):
@@ -130,6 +132,7 @@ def day():
         #grid[i, 0] = "."
 
     #prod
+    #part 1
     grid = {}
     grid[2,1] = ["B", 0,0]
     grid[2,2] = ["B", 0,0]
@@ -139,6 +142,27 @@ def day():
     grid[6,2] = ["D", 0,0]
     grid[8,1] = ["D", 0,0]
     grid[8,2] = ["C", 0,0]
+    
+    #part 2
+    '''
+    grid = {}
+    grid[2,1] = ["B", 0,0]
+    grid[2,2] = ["D", 0,0]
+    grid[2,3] = ["D", 0,0]
+    grid[2,4] = ["B", 0,0]
+    grid[4,1] = ["A", 0,0]
+    grid[4,2] = ["C", 0,0]
+    grid[4,3] = ["B", 0,0]
+    grid[4,4] = ["C", 0,0]
+    grid[6,1] = ["A", 0,0]
+    grid[6,2] = ["B", 0,0]
+    grid[6,3] = ["A", 0,0]
+    grid[6,4] = ["D", 0,0]
+    grid[8,1] = ["D", 0,0]
+    grid[8,2] = ["A", 0,0]
+    grid[8,3] = ["C", 0,0]
+    grid[8,4] = ["C", 0,0]
+    '''
     
     #Test
     #grid2 = {}
@@ -174,7 +198,7 @@ def day():
                     final_cost.append(c1)
                     print(f"Cost: {c1}")
                 else:
-                    if c1 < 11453 and g1 not in many_grids:
+                    if c1 <= 11417 and g1 not in many_grids:
                         many_grids.append(g1)
                         many_costs.append(c1)
                         many_max_costs.append(max_c1)
@@ -183,6 +207,6 @@ def day():
         grids = many_grids
         costs = many_costs
         max_costs = many_max_costs
-    print(min(final_cost)) # 11453 too high 11417 corre t
+    print(min(final_cost)) # 11417 correct
 
 day()

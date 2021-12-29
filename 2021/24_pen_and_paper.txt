@@ -1,0 +1,274 @@
+inp w
+mul x 0 x=0
+add x z x=z
+mod x 26 x=0
+div z 1 z=0
+add x 14 x=14
+eql x w x=0
+eql x 0 x=1
+mul y 0 y=0
+add y 25 y=25
+mul y x y=25
+add y 1 y=26
+mul z y z=0
+mul y 0 y=0
+add y w y=w
+add y 8 y=w+8
+mul y x y=w+8
+add z y z=w+8 # tested ok
+
+inp w2
+mul x 0 x=0
+add x z x=w1+8
+mod x 26 x=w1+8 (mod 26)
+div z 1 z=w1+8
+add x 13 x=w1+21
+eql x w x=0
+eql x 0 x=1
+mul y 0 y=0
+add y 25 y=25
+mul y x y=25
+add y 1 y=26
+mul z y z=(w1+8)26
+mul y 0 y=0
+add y w y=w2
+add y 8 y=w2+8
+mul y x y=w2+8
+add z y z=(w1+8)*26+w2+8 # tested ok
+
+inp w3
+mul x 0 x=0
+add x z x=(w1+8)26+w2+8
+mod x 26 x=w2+8
+div z 1 z=(w1+8)*26+w2+8
+add x 13 x=w2+21
+eql x w x=0
+eql x 0 x=1
+mul y 0 y=0
+add y 25 y=25
+mul y x y=25*1
+add y 1 y=26
+mul z y z=((w1+8)*26+w2+8)*26
+mul y 0 y=0
+add y w y=w3
+add y 3 y=w3+3
+mul y x y=w3+3
+add z y z=((w1+8)*26+w2+8)*26+w3+3 #tested ok
+
+inp w4
+mul x 0 x=0
+add x z x=((w1+8)*26+w2+8)*26+w3+3
+mod x 26 x=w3+3
+div z 1 z=((w1+8)*26+w2+8)*26+w3+3
+add x 12 x=w3+12
+eql x w x=0
+eql x 0 x=1
+mul y 0 y=0
+add y 25 y=25
+mul y x y=25
+add y 1 y=26
+mul z y z=(((w1+8)*26+w2+8)*26+w3+3)*26
+mul y 0 y=0
+add y w y=w4
+add y 10 y=w4+10
+mul y x y=w4+10
+add z y z=(((w1+8)*26+w2+8)*26+w3+3)*26+w4+10
+
+inp w5
+mul x 0 x=0
+add x z x=(((w1+8)*26+w2+8)*26+w3+3)*26+w4+10
+mod x 26 x=w4+10
+div z 26 z=((w1+8)*26+w2+8)*26+w3+3
+add x -12 x=w4-2
+eql x w  => w5==w4-2
+eql x 0 x=0
+mul y 0 y=0
+add y 25 y=25
+mul y x y=0
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)*26+w3+3
+mul y 0 y=0
+add y w y=w5
+add y 8 y=w5+8
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)*26+w3+3
+
+inp w6
+mul x 0 x=0
+add x z x=((w1+8)*26+w2+8)*26+w3+3
+mod x 26 x=w3+3
+div z 1 z=((w1+8)*26+w2+8)*26+w3+3
+add x 12 x=w3+15
+eql x w x=0
+eql x 0 x=1
+mul y 0 y=0
+add y 25 y=25
+mul y x y=25
+add y 1 y=26
+mul z y z=(((w1+8)*26+w2+8)*26+w3+3)*26
+mul y 0 y=0
+add y w y=w6
+add y 8 y=w6+8
+mul y x y=w6+8
+add z y z=(((w1+8)*26+w2+8)*26+w3+3)*26+w6+8
+
+inp w7
+mul x 0
+add x z x=(((w1+8)*26+w2+8)*26+w3+3)*26+w6+8
+mod x 26 x=w6+8
+div z 26 z=((w1+8)*26+w2+8)*26+w3+3
+add x -2 x=w6+6
+eql x w x=w6+6==w7
+eql x 0 x=0
+mul y 0 y=0
+add y 25 y=25
+mul y x y=0
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)*26+w3+3
+mul y 0 y=0
+add y w y=w7
+add y 8 y=w7+8
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)*26+w3+3
+
+inp w8
+mul x 0 x=0
+add x z x=((w1+8)*26+w2+8)*26+w3+3
+mod x 26 x=w3+3
+div z 26 z=((w1+8)*26+w2+8)
+add x -11 x=w3-8 => w8=w3-3
+eql x w x=1
+eql x 0 x=0
+mul y 0 y=0
+add y 25
+mul y x
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)
+mul y 0 y=0
+add y w 
+add y 5 y=w8+5
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)
+
+inp w9
+mul x 0 x=0
+add x z x=((w1+8)*26+w2+8)
+mod x 26 x=w2+8
+div z 1 z=((w1+8)*26+w2+8)
+add x 13 x=w2+21
+eql x w x=0
+eql x 0 x=1
+mul y 0 
+add y 25
+mul y x 
+add y 1 y=26
+mul z y z=((w1+8)*26+w2+8)*26
+mul y 0 y=0
+add y w y=w9
+add y 9 y=w9+9
+mul y x
+add z y z=((w1+8)*26+w2+8)*26+w9+9
+
+inp w10
+mul x 0 x=0
+add x z
+mod x 26 x=w9+9
+div z 1 z=((w1+8)*26+w2+8)*26+w9+9
+add x 14 x=w9+23
+eql x w x=0
+eql x 0 x=1
+mul y 0 
+add y 25
+mul y x
+add y 1 y=26
+mul z y z=(((w1+8)*26+w2+8)*26+w9+9)*26
+mul y 0
+add y w 
+add y 3 y=w10+3
+mul y x
+add z y z=(((w1+8)*26+w2+8)*26+w9+9)*26+w10+3
+
+inp w11
+mul x 0
+add x z
+mod x 26 x=w10+3
+div z 26 z=((w1+8)*26+w2+8)*26+w9+9
+add x 0 
+eql x w w11=w10+3
+eql x 0 x=0
+mul y 0
+add y 25
+mul y x
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)*26+w9+9
+mul y 0
+add y w
+add y 4 y=w11+4
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)*26+w9+9
+
+inp w12
+mul x 0
+add x z
+mod x 26 x=w9+9
+div z 26 z=((w1+8)*26+w2+8)
+add x -12 x=w9-3 => w12=w9-3
+eql x w
+eql x 0 x=0
+mul y 0
+add y 25
+mul y x
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)
+mul y 0
+add y w y=w12
+add y 9 y=w12+9
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)
+
+inp w13
+mul x 0
+add x z
+mod x 26 x=w2+8
+div z 26 z=(w1+8)
+add x -13 x=w2-5 w13=w2-5
+eql x w
+eql x 0 x=0
+mul y 0
+add y 25
+mul y x
+add y 1 y=1
+mul z y z=(w1+8)
+mul y 0
+add y w
+add y 2
+mul y x
+add z y z=(w1+8)
+
+inp w14
+mul x 0
+add x z
+mod x 26 x=w1+8
+div z 26 z=(w1+8)
+add x -6 x=w1+2
+eql x w => w14=w1+2
+eql x 0 x=0
+mul y 0
+add y 25
+mul y x
+add y 1 y=1
+mul z y z=((w1+8)*26+w2+8)
+mul y 0
+add y w
+add y 7 y=w14+7
+mul y x y=0
+add z y z=((w1+8)*26+w2+8)
+
+## Only solution if:
+w5==w4-2
+w6+6==w7
+w8==w3-3
+w11==w10+3
+w12==w9-3
+w13==w2-5
+w14==w1+2

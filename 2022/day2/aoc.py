@@ -27,7 +27,7 @@ def part_one():
     for line in file:
         op, me = line.strip("\n").split()
         sum = sum + points(op, me)
-    print(sum)
+    print("Part 1: ", sum)
 
 
 part_one()
@@ -58,7 +58,7 @@ def part_two():
             me = "X"
 
         sum = sum + points(op, me)
-    print(sum)
+    print("Part 2: ", sum)
 
 
 part_two()

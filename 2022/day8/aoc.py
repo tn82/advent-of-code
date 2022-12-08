@@ -1,17 +1,10 @@
-
-
 def part_one():
     file = open("input.txt", "r")
-    y = 0
     forrest = {}
-    for line in file:
+    for y, line in enumerate(file):
         line = line.strip()
-        row = [int(i) for i in line]
-        x = 0
-        for r in row:
-            forrest[(x, y)] = r
-            x += 1
-        y += 1
+        for x, r in enumerate(line.strip()):
+            forrest[(x, y)] = int(r)
     x_max = x
     y_max = y
     count = 0
@@ -22,7 +15,7 @@ def part_one():
             if forrest[(i, y)] >= val:
                 blockers += 1
                 break
-        for i in range(x + 1, x_max):
+        for i in range(x + 1, x_max + 1):
             if forrest[(i, y)] >= val:
                 blockers += 1
                 break
@@ -30,7 +23,7 @@ def part_one():
             if forrest[(x, j)] >= val:
                 blockers += 1
                 break
-        for j in range(y + 1, y_max):
+        for j in range(y + 1, y_max + 1):
             if forrest[(x, j)] >= val:
                 blockers += 1
                 break
@@ -43,25 +36,25 @@ def part_one():
     best_view = 0
     for key, val in forrest.items():
         x, y = key
-        if x == 0 or x == x_max-1 or y == 0 or y == y_max-1:
+        if x == 0 or x == x_max or y == 0 or y == y_max:
             continue
         view1 = 0
-        for i in range(max(x-1, 0), -1, -1):
+        for i in range(max(x - 1, 0), -1, -1):
             view1 += 1
             if forrest[(i, y)] >= val:
                 break
         view2 = 0
-        for i in range(x + 1, x_max):
+        for i in range(x + 1, x_max + 1):
             view2 += 1
             if forrest[(i, y)] >= val:
                 break
         view3 = 0
-        for j in range(max(y-1, 0), -1, -1):
+        for j in range(max(y - 1, 0), -1, -1):
             view3 += 1
             if forrest[(x, j)] >= val:
                 break
         view4 = 0
-        for j in range(y + 1, y_max):
+        for j in range(y + 1, y_max + 1):
             view4 += 1
             if forrest[(x, j)] >= val:
                 break
@@ -72,5 +65,5 @@ def part_one():
     print("Part 2: ", best_view)
     assert best_view == 474606
 
-part_one()
 
+part_one()

@@ -31,45 +31,45 @@ def compare2(left, right):
     while True:
         if type(left) == int and type(right) == int:
             if left == right:
-                return -1
-            return 1 if left < right else 0
+                return 0
+            return -1 if left < right else 1
         elif type(left) == list and type(right) == list:
             if left == right:
-                return -1
-            if left and not right:
                 return 0
-            elif not left and right:
+            if left and not right:
                 return 1
+            elif not left and right:
+                return -1
             left0 = left.pop(0)
             right0 = right.pop(0)
             comp0 = compare2(left0, right0)
-            if comp0 > -1:
+            if comp0:
                 return comp0
         elif type(left) == list and type(right) != list:
             right = [right]
             if left == right:
-                return -1
-            if left and not right:
                 return 0
-            elif not left and right:
+            if left and not right:
                 return 1
+            elif not left and right:
+                return -1
             left0 = left.pop(0)
             right0 = right.pop(0)
             comp0 = compare2(left0, right0)
-            if comp0 > -1:
+            if comp0:
                 return comp0
         elif type(left) != list and type(right) == list:
             left = [left]
             if left == right:
-                return -1
-            if left and not right:
                 return 0
-            elif not left and right:
+            if left and not right:
                 return 1
+            elif not left and right:
+                return -1
             left0 = left.pop(0)
             right0 = right.pop(0)
             comp0 = compare2(left0, right0)
-            if comp0 > -1:
+            if comp0:
                 return comp0
 import copy
 def compare3(left, right):
@@ -98,14 +98,14 @@ def part_one():
         else:
             package += 1
             right = l
-            #print(left, right, package)
-            if compare2(left, right):
+            if compare2(left, right) < 0:
                 count += package
-                print(package, count)
 
 
     print("Part 1: ", count)
     assert count == 6420
+
+part_one()
 
 import functools
 compare_key = functools.cmp_to_key(compare3)

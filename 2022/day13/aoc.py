@@ -12,29 +12,25 @@ def input_test():
         return [line.rstrip() for line in file]
 
 
-def compare(left_orig, right_orig):
-    left = copy.deepcopy(left_orig)
-    right = copy.deepcopy(right_orig)
-    while True:
-        if type(left) == int and type(right) == int:
-            if left == right:
-                return 0
-            return -1 if left < right else 1
-        elif type(left) == list and type(right) != list:
-            right = [right]
-        elif type(left) != list and type(right) == list:
-            left = [left]
+def compare(left, right):
+    if type(left) == int and type(right) == int:
         if left == right:
             return 0
-        if left and not right:
-            return 1
-        elif not left and right:
-            return -1
-        left0 = left.pop(0)
-        right0 = right.pop(0)
-        comp0 = compare(left0, right0)
-        if comp0:
-            return comp0
+        return -1 if left < right else 1
+    elif type(left) == list and type(right) != list:
+        right = [right]
+    elif type(left) != list and type(right) == list:
+        left = [left]
+    if left == right:
+        return 0
+    if left and not right:
+        return 1
+    elif not left and right:
+        return -1
+    comp0 = compare(left[0], right[0])
+    if comp0:
+        return comp0
+    return compare(left[1:], right[1:])
 
 
 def part_one():

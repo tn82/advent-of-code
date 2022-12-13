@@ -2,6 +2,7 @@ def input():
     with open("input.txt", "r") as file:
         return [line.rstrip() for line in file]
 
+
 def input_test():
     with open("test.txt", "r") as file:
         return [line.rstrip() for line in file]
@@ -9,6 +10,7 @@ def input_test():
 
 def check_signal(c: int):
     return c == 20 or c == 60 or c == 100 or c == 140 or c == 180 or c == 220
+
 
 def update_cyle(X, cycle, pixel, CTR):
     if X - 1 <= pixel <= X + 1:
@@ -22,6 +24,7 @@ def update_cyle(X, cycle, pixel, CTR):
         CTR += "\n"
 
     return cycle, pixel, CTR
+
 
 def day10():
     X = 1
@@ -45,12 +48,10 @@ def day10():
             if check_signal(cycle):
                 count += cycle * X
 
-
-
     print("Part 1: ", count)
     assert count == 15020
 
-    print(CTR) # EFUGLPAP
+    print(CTR)
     print("Part 2: ", "EFUGLPAP")
 
 

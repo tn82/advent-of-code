@@ -43,7 +43,7 @@ def monkey_business(monks, rounds: int, divider: int):
     result.sort()
     return result[-1] * result[-2]
 
-def part_one():
+def day11():
     test_monks = [
         Monk([79,98], 19, None, 23, 2, 3),
         Monk([54,65,75,74], None, 6, 19, 2, 0),
@@ -70,4 +70,4 @@ def part_one():
     assert part_two == 14399640002
 
 
-part_one()
+day11()

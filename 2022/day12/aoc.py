@@ -69,7 +69,7 @@ def part_one():
     print("Part 1: ", len(path) - 1)
     assert len(path) - 1 == 437
 
-    longest_shortest = 1e9
+    shortest = 1e9
     for coo, val in grid.items():
         if val != "a":
             continue
@@ -77,11 +77,11 @@ def part_one():
         if not path:
             continue
         path_len = len(path) - 1
-        if path_len < longest_shortest:
-            longest_shortest = path_len
+        if path_len < shortest:
+            shortest = path_len
 
-    print("Part 2: ", longest_shortest)
-    assert 430 == longest_shortest
+    print("Part 2: ", shortest)
+    assert 430 == shortest
 
 
 part_one()

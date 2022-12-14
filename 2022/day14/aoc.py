@@ -2,9 +2,11 @@ def input():
     with open("input.txt", "r") as file:
         return [line.rstrip() for line in file]
 
+
 def input_test():
     with open("test.txt", "r") as file:
         return [line.rstrip() for line in file]
+
 
 def get_grid():
     grid = {}
@@ -24,61 +26,39 @@ def get_grid():
             y_prev = y
     return grid
 
-def part_one():
+
+def day14():
     grid = get_grid()
-    abyss = max(([key[1] for key, _ in grid.items()]))
+    part1_abyss = max(([key[1] for key, _ in grid.items()]))
+    part2_abyss = part1_abyss + 2
+    part1 = 0
+    part2 = 0
     count = 0
-    found = False
-    while not found: # Add one sand
+    while not part1 or not part2: # Add one sand
         x = 500
         y = 0
         while True: # Step falling
-            if y >= abyss:
-                found = True
-                break
-            if (x, y + 1) not in grid:
+            if not part1 and y >= part1_abyss:
+                part1 = count
+            if (x, y + 1) not in grid and y + 1 < part2_abyss:
                 y += 1
-            elif (x - 1, y + 1) not in grid:
-                y += 1
-                x -= 1
-            elif (x + 1, y + 1) not in grid:
-                y += 1
-                x += 1
-            else:
-                grid[(x, y)] = 1
-                count += 1
-                break
-
-    print("Part 1: ", count)
-    assert count == 964
-
-
-part_one()
-
-def part_two():
-    count = 0
-    grid = get_grid()
-    abyss = max(([key[1] for key, _ in grid.items()])) + 2
-    count = 0
-    found = False
-    while not found: # Add one sand
-        x = 500
-        y = 0
-        while True: # Step falling
-            if (x, y + 1) not in grid and y + 1 < abyss:
-                y += 1
-            elif (x - 1, y + 1) not in grid and y + 1 < abyss:
+            elif (x - 1, y + 1) not in grid and y + 1 < part2_abyss:
                 y += 1
                 x -= 1
-            elif (x + 1, y + 1) not in grid and y + 1 < abyss:
+            elif (x + 1, y + 1) not in grid and y + 1 < part2_abyss:
                 y += 1
                 x += 1
             else:
                 grid[(x, y)] = 2
                 count += 1
                 if x == 500 and y == 0:
-                    found = True
+                    part2 = count
                 break
-    print("Part 2: ", count)
-    assert count == 32041
-part_two()
+
+    print("Part 1: ", part1)
+    assert 964 == part1
+    print("Part 2: ", part2)
+    assert 32041 == part2
+
+
+day14()

@@ -55,47 +55,8 @@ def update_grid(shape, grid):
 def grid_max(grid):
     return max([y for (_, y) in grid.keys()])
 
-def part_one():
-    grid = {}
-    grid[(0, 0)] = 1
-    grid[(1, 0)] = 1
-    grid[(2, 0)] = 1
-    grid[(3, 0)] = 1
-    grid[(4, 0)] = 1
-    grid[(5, 0)] = 1
-    grid[(6, 0)] = 1
-    count = 0
-    gases = input()[0]
-    gases_len = len(gases)
-    for rock in range(0, 2022):
-        rock_type = rock % 5
-        shape = shapes[rock_type]
-        x = 3
-        y = grid_max(grid) + 4
-        shape = shift(shape, y)
-        while True:
-            gas = gases[count % gases_len]
-            count +=1
-            if not hit_wall(shape, gas, grid):
-                shape = shift(shape, gas)
-            if not hit(shape, grid):
-                shape = shift(shape, "v")
-            else:
-                update_grid(shape, grid)
-                break
-
-    print("Part 1: ", grid_max(grid))
-    assert grid_max(grid) == 3090
-
-def part_two():
-    grid = {}
-    grid[(0, 0)] = 1
-    grid[(1, 0)] = 1
-    grid[(2, 0)] = 1
-    grid[(3, 0)] = 1
-    grid[(4, 0)] = 1
-    grid[(5, 0)] = 1
-    grid[(6, 0)] = 1
+def day17(number_of_rocks):
+    grid = {(0, 0): 1, (1, 0): 1, (2, 0): 1, (3, 0): 1, (4, 0): 1, (5, 0): 1, (6, 0): 1}
     count = 0
     gases = input()[0]
     gases_len = len(gases)
@@ -103,25 +64,22 @@ def part_two():
     prev_size = 0
     prev_rock = 0
     extra = 0
-    while rock < 1e12:
+    while rock < number_of_rocks:
         rock_type = rock % 5
         shape = shapes[rock_type]
-        x = 3
         y = grid_max(grid) + 4
         shape = shift(shape, y)
         while True:
             gas = gases[count % gases_len]
-            if rock == 3453:
-                print("rock dist", rock - prev_rock)
-                stepp = round(1e12 / (rock - prev_rock)) -2
-                extra = (grid_max(grid) - prev_size) * stepp
-                rock += stepp * (rock - prev_rock)
+            if rock == 3453: # Recurring pattern at 3453
+                mega_step = round(number_of_rocks / (rock - prev_rock)) -2
+                extra = (grid_max(grid) - prev_size) * mega_step
+                rock += mega_step * (rock - prev_rock)
+            # Find recurring pattern => pattern at rock 3453
             if count % gases_len == 0:
-                prev_rock = rock
-                prev_size = grid_max(grid)
-                print(rock_type, grid_max(grid), rock)
+                 prev_rock = rock
+                 prev_size = grid_max(grid)
             count +=1
-            #print(rock, count)
             if not hit_wall(shape, gas, grid):
                 shape = shift(shape, gas)
             if not hit(shape, grid):
@@ -130,9 +88,12 @@ def part_two():
                 update_grid(shape, grid)
                 break
         rock += 1
+    return grid_max(grid) + extra
 
-    print("Part 2: ", grid_max(grid) + extra)
-    assert grid_max(grid) + extra == 1530057803453
+one = day17(2022)
+print("Part 1: ", one)
+assert one == 3090
 
-part_one()
-part_two()
+two = day17(1e12)
+print("Part 1: ", two)
+assert two == 1530057803453

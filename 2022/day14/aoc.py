@@ -49,7 +49,7 @@ def day14():
                 y += 1
                 x += 1
             else:
-                grid[(x, y)] = 2
+                grid[(x, y)] = 1
                 count += 1
                 if x == 500 and y == 0:
                     part2 = count

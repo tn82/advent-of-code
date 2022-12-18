@@ -40,7 +40,6 @@ def day18():
     for p in grid:
         for shift in shifts:
             ps = (shift[0] + p[0], shift[1] + p[1], shift[2] + p[2])
-            side_count= 0
             if ps not in grid:
                 part_one += 1
                 visited = visited_interior.copy()
@@ -48,7 +47,6 @@ def day18():
                 if c == 0:
                     visited_interior = visited_interior.union(visited)
                 part_two += c
-                side_count += c
 
 
     print("Part 1: ", part_one)

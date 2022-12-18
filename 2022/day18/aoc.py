@@ -12,7 +12,7 @@ def find_air(p, grid, visited, mins, maxs):
     for shift in shifts:
         ps = (shift[0] + p[0], shift[1] + p[1], shift[2] + p[2])
         if ps not in grid and ps not in visited:
-            visited[ps] = 1
+            visited.add(ps)
             if ps[0] > maxs[0] or ps[0] < mins[0] or ps[1] > maxs[1] or ps[1] < mins[1] or ps[2] > maxs[2] or ps[2] < mins[2]:
                 return 1
             else:
@@ -33,17 +33,20 @@ def day18():
     zs = [z for (_, _, z) in grid.keys()]
     mins = (min(xs), min(ys), min(zs))
     maxs = (max(xs), max(ys), max(zs))
+
     part_one = 0
     part_two = 0
-    #visited_interior = {}
+    visited_interior = set()
     for p in grid:
         for shift in shifts:
             ps = (shift[0] + p[0], shift[1] + p[1], shift[2] + p[2])
             side_count= 0
             if ps not in grid:
                 part_one += 1
-                visited = {}
+                visited = visited_interior.copy()
                 c = find_air(ps, grid, visited, mins, maxs)
+                if c == 0:
+                    visited_interior = visited_interior.union(visited)
                 part_two += c
                 side_count += c
 
@@ -51,7 +54,7 @@ def day18():
     print("Part 1: ", part_one)
     assert part_one == 3564
 
-    print("Part 2: ", part_two) # Too low 2005, Too low 2018, too low 2027
+    print("Part 2: ", part_two)
     assert part_two == 2106
 
 

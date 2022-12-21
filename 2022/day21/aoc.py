@@ -63,9 +63,6 @@ def reduce(replace_yell):
                     if m.operand == "/":
                         m.num = m.oper1_num / m.oper2_num
                         # Only valid if int but we can get direction of solution from the invalid solution
-                        # if abs(m.num - round(m.num, 0)) > 0.000001:
-                        #    breaker = True
-                        #    break
                         m.num = int(m.oper1_num / m.oper2_num)
                     if m.operand == "*":
                         m.num = m.oper1_num * m.oper2_num
@@ -83,9 +80,11 @@ def part_two():
 
     part_two = 0
     yell_low_bound = 1
-    yell_high_bound = part_one
+    yell_high_bound = part_one # Use part1 as upperbound, why not
     yell = 1
     while True:
+        # Pattern in m.oper1_num / m.oper2_num
+        # Interval half seach for this pattern
         num, direction = reduce(yell)
         if direction == -1:
             yell += 1

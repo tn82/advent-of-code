@@ -4,7 +4,5 @@
 *.pyc
 *.pyo
 *.swp
-.myenv
-.tox
-.pex
+venv/*
 input.txt

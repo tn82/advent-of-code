@@ -1,0 +1,10 @@
+# Python
+*.so
+*.egg-info/
+*.pyc
+*.pyo
+*.swp
+.myenv
+.tox
+.pex
+input.txt

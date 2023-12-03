@@ -19,7 +19,6 @@ def part_one():
     print("Part 1: ", sums)
     #assert(sums == 0)
 
-
 def part_two():
     sums = 0
     for line in test():
@@ -28,6 +27,16 @@ def part_two():
     print("Part 2: ", sums)
     #assert(sums == 0)
 
+def in_grid(grid, r, c):
+    # No diagonal
+    # shifts = ((1, 0), (0, 1), (0, -1), (-1, 0))
+    # All directions
+    shifts = ((1, 0), (1, 1), (1, -1), (0, 1), (0, -1), (-1, 0), (-1, -1), (-1, 1))
+    for shift in shifts:
+        coo = (r + shift[0], c + shift[1])
+        if coo in grid and True: # Add conditions
+            return True
+    return False
 
-part_one()
+#part_one()
 #part_two()

@@ -17,6 +17,7 @@ def part_one():
     print("Part 1: ", sums)
     #assert(sums == 0)
 
+
 def part_two():
     sums = 0
     for line in test():

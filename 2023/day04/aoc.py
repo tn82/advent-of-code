@@ -27,7 +27,6 @@ def part_one():
     print("Part 1: ", sums)
     assert(sums == 17782)
 
-
 def part_two():
     cards = []
     for card, line in enumerate(input()):
@@ -35,7 +34,6 @@ def part_two():
     for card, line in enumerate(input()):
         _, ll = line.split(":")
         win, my = ll.split("|")
-        wins = []
         wins = win.split()
         p = 0
         for m in my.split():

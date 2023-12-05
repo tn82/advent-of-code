@@ -13,7 +13,7 @@ def test():
 
 def part_one():
     sums = 0
-    for line in test():
+    for i, line in enumerate(test()):
         sums += int(line)
 
     print("Part 1: ", sums)
@@ -22,7 +22,7 @@ def part_one():
 
 def part_two():
     sums = 0
-    for line in test():
+    for i, line in enumerate(test()):
         sums += int(line)
 
     print("Part 2: ", sums)

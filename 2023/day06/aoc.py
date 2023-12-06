@@ -1,54 +1,20 @@
-import os
-from collections import defaultdict
 
-day_path = os.path.dirname(__file__)
-
-def input():
-    with open(os.path.join(day_path, "input.txt"), "r") as file:
-        return [line.rstrip() for line in file]
-
-def test():
-    with open(os.path.join(day_path, "test.txt"), "r") as file:
-        return [line.rstrip() for line in file]
-
-#Time:        48     87     69     81
-#Distance:   255   1288   1117   1623
-
-# Time:      7  15   30
-# Distance:  9  40  200
-def part_one():
-    tests = ((7, 9), (15, 40), (30, 200))
-    inputs = ((48, 255), (87, 1288), (69, 1117), (81, 1623))
+def day06(input):
     sums = 1
-    for race in inputs:
+    for race in input:
         time, dist = race
         wins = 0
         for t in range(1, time):
-            speed = t
-            d = speed * (time - t)
-            if d > dist:
+            if t * (time - t) > dist:
                 wins += 1
         sums *= wins
 
+    return sums
 
+part1 = day06(((48, 255), (87, 1288), (69, 1117), (81, 1623)))
+print(f"Part 1: {part1}")
+assert(part1 == 252000)
 
-    print("Part 1: ", sums)
-    #assert(sums == 0)
-
-
-def part_two():
-    tests = (71530, 940200)
-    inputs = (48876981, 255128811171623)
-    sums = 1
-    time, dist = inputs
-    wins = 0
-    for t in range(1, time):
-        speed = t
-        d = speed * (time - t)
-        if d > dist:
-            wins += 1
-    sums *= wins
-    print("Part 2: ", sums)
-
-#part_one()
-part_two()
+part2 = day06(((48876981, 255128811171623),))
+print(f"Part 2: {part2}")
+assert(part2 == 36992486)

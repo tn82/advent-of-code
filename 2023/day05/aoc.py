@@ -10,20 +10,6 @@ def input():
 def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
-
-def mapper2(datas, i):
-    m = {}
-    while True:
-        if i + 1 > len(datas):
-            return m, i
-        if not datas[i]:
-            return m, i
-
-        if datas[i][0].isdigit():
-            dest_s, source_s, l = datas[i].split()
-            for li in range(int(l)):
-                m[int(source_s) + int(li)] = int(dest_s) + int(li)
-            i = i + 1
         
 def mapper(datas, i):
     m = []
@@ -36,13 +22,6 @@ def mapper(datas, i):
         if datas[i][0].isdigit():
             m.append(datas[i].split())
             i = i + 1
-
-def s_map_inv(s, m):
-    si = int(s)
-    for r in m:
-        if si >= int(r[0]) and si <= int(r[0]) + int(r[2]):
-            return si + int(r[1]) - int(r[0])
-    return s
 
 def s_map(s, m):
     si = int(s)
@@ -102,8 +81,6 @@ def part_one():
             low_ball = t
             print(low_ball)
 
-
-        
     print("Part 1: ", low_ball)
     assert(low_ball == 111627841)
 
@@ -148,8 +125,6 @@ def part_two():
 
     low_ball = 10000000000000000000000
     for i in range(int(len(seeds)/2)):
-        print("Seed batch", i, "len", int(seeds[i*2 + 1]))
-
         j = int(seeds[i*2])
         prev = 0
         steps = 1
@@ -163,12 +138,11 @@ def part_two():
             t = s_map(t, temperature_hum)
             t = s_map(t, humidity_location)
             local_steps += 1
-
             if t < low_ball:
                 low_ball = t
                 print(low_ball)
-            if t - prev == steps and local_steps > 6000 and steps == 1:
-                steps = 5000
+            if t - prev == steps and local_steps > 7001 and steps == 1:
+                steps = 7000
                 local_steps = 0
             elif t - prev != steps and steps != 1:
                 j -= (steps + 10)
@@ -179,15 +153,10 @@ def part_two():
                 j -= (steps + 10)
                 steps = 1
                 local_steps = 0
-
             prev = t
         
     print("Part 2: ", low_ball)
-    #assert(low_ball == )  too high
-    # 237692107
-    # 475615938
-    # 69323689
-
+    assert(low_ball == 69323688)
 
 part_one()
 part_two()

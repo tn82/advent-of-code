@@ -4,5 +4,5 @@
 *.pyc
 *.pyo
 *.swp
-venv/*
+venv*/*
 input.txt

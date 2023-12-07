@@ -11,6 +11,9 @@ def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
 
+def int_list(char_list):
+    return [int(c) for c in char_list]
+
 def part_one():
     sums = 0
     for line in test():

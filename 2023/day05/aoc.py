@@ -10,7 +10,10 @@ def input():
 def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
-        
+
+def int_list(char_list):
+    return [int(c) for c in char_list]
+
 def mapper(datas, i):
     m = []
     while True:
@@ -20,15 +23,14 @@ def mapper(datas, i):
             return m, i
 
         if datas[i][0].isdigit():
-            m.append(datas[i].split())
+            m.append(int_list(datas[i].split()))
             i = i + 1
 
 def s_map(s, m):
-    si = int(s)
     for r in m:
-        if si >= int(r[1]) and si < int(r[1]) + int(r[2]):
-            return si + int(r[0]) - int(r[1])
-    return si
+        if s >= r[1] and s < r[1] + r[2]:
+            return s + r[0] - r[1]
+    return s
 
 def part_one():
     datas = input()
@@ -44,7 +46,7 @@ def part_one():
     for i in range(len(datas)):
         if datas[i].startswith("seeds:"):
             _, s = datas[i].split(":")
-            seeds = s.split()
+            seeds = int_list(s.split())
             i += 1
         if "seed-to-soil map:" in datas[i]:
             i += 1
@@ -99,7 +101,7 @@ def part_two():
     for i in range(len(datas)):
         if datas[i].startswith("seeds:"):
             _, s = datas[i].split(":")
-            seeds = s.split()
+            seeds = int_list(s.split())
             i += 1
         if "seed-to-soil map:" in datas[i]:
             i += 1
@@ -125,11 +127,11 @@ def part_two():
 
     low_ball = 10000000000000000000000
     for i in range(int(len(seeds)/2)):
-        j = int(seeds[i*2])
+        j = seeds[i*2]
         prev = 0
         steps = 1
         local_steps = 0
-        while j < int(seeds[i*2]) + int(seeds[i*2 + 1])+1:
+        while j < seeds[i*2] + seeds[i*2 + 1] + 1:
             t = s_map(j, seeds_soil)
             t = s_map(t, soil_fertilizer)
             t = s_map(t, fertilizer_water)
@@ -141,15 +143,15 @@ def part_two():
             if t < low_ball:
                 low_ball = t
                 print(low_ball)
-            if t - prev == steps and local_steps > 7001 and steps == 1:
-                steps = 7000
+            if t - prev == steps and local_steps > 5001 and steps == 1:
+                steps = 5000
                 local_steps = 0
             elif t - prev != steps and steps != 1:
                 j -= (steps + 10)
                 steps = 1
                 local_steps = 0
             j += steps
-            if steps != 1 and j >= int(seeds[i*2]) + int(seeds[i*2 + 1])+1:
+            if steps != 1 and j >= seeds[i*2] + seeds[i*2 + 1]+1:
                 j -= (steps + 10)
                 steps = 1
                 local_steps = 0

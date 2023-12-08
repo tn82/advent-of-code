@@ -59,7 +59,7 @@ def part_one():
 
 def part_two():
     sums = 0
-    cards_ = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]
+    cards_ = ["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]
     cards = {}
     for i, c in enumerate(cards_):
         cards[c] = i

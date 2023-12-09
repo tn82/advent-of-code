@@ -21,10 +21,7 @@ def deltas(line):
     return d
 
 def only_zero(line):
-    for l in line:
-        if l != 0:
-            return False
-    return True
+    return all(v == 0 for v in line)
 
 def part_one():
     sums = 0
@@ -46,7 +43,7 @@ def part_one():
             grid[j-1].append(s)
         sums += s
     print("Part 1: ", sums)
-    #assert(sums == 0)
+    assert(sums == 1762065988)
 
 
 def part_two():
@@ -69,8 +66,8 @@ def part_two():
             grid[j-1].insert(0, s)
         sums += s
     print("Part 2: ", sums)
-    #assert(sums == 0)
+    assert(sums == 1066)
 
 
-#part_one()
+part_one()
 part_two()

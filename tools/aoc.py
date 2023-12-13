@@ -100,5 +100,9 @@ def bfs_driver():
     print("Res: ", res)
 
 bfs_driver()
+
+def rotate2D_clockwise(grid):
+    return list(zip(*grid[::-1]))
+
 #part_one()
 #part_two()

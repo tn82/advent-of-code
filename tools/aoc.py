@@ -83,7 +83,19 @@ def bfs(visited, queue, graph, node):
                 visited.append(neighbour)
                 queue.append(neighbour)
 
-def bfs_driver():
+# DFS algorithm
+def dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(node)
+
+    print(node)
+
+    for neighbour in graph[node]:
+        dfs(graph, neighbour, visited)
+    return visited
+
+def driver():
     graph = {
         '5' : ['3','7'],
         '3' : ['2', '4'],
@@ -92,17 +104,46 @@ def bfs_driver():
         '4' : ['8'],
         '8' : []
     }
-    visited = [] # List for visited nodes.
+    visited = set() # Visited nodes
     queue = []     #Initialize a queue
     # Driver Code
     print("Breadth-First Search")
     res = bfs(visited, queue, graph, '5')    # function calling
     print("Res: ", res)
 
-bfs_driver()
+    # Driver Code
+    print("Breadth-First Search")
+    res = bfs(visited, queue, graph, '5')    # function calling
+    print("Res: ", res)
+
+
+driver()
 
 def rotate2D_clockwise(grid):
     return list(zip(*grid[::-1]))
 
+from functools import cache
+
+# Depth-First Search with functools cache#
+# Input must be 
+@cache
+def dfs(group, sizes, num_done_in_group=0):
+    if not group:
+        if not sizes and num_done_in_group == 0:
+            return 1
+        else:
+            return 0
+    num_sols = 0
+    neighbours = ["A", "B"]
+    for neighbour in neighbours:
+        if neighbour == "#":
+            num_sols += lopploop5(group[1:], sizes, num_done_in_group + 1)
+        else:
+            if num_done_in_group:
+                if sizes and sizes[0] == num_done_in_group:
+                    num_sols += lopploop5(group[1:], sizes[1:])
+            else:
+                num_sols += lopploop5(group[1:], sizes)
+    return num_sols
 #part_one()
 #part_two()

@@ -64,7 +64,8 @@ def part_two():
     results_cache = {}
     #results_cache[tuple(lines)] = 0
 
-    for cycle in range(1e9):
+    big_loop = 1000000000
+    for cycle in range(big_loop):
         # North
         for coo, s in grid.items():
             if s == "O":
@@ -120,11 +121,14 @@ def part_two():
                 sums += maxx - coo[0] + 1
         if sums in results_cache:
             cycle_len = cycle - results_cache[sums]
+            remaining = big_loop - 1 - cycle
+            if remaining % cycle_len == 0:
+                print("Part 2: ", sums)
+                break
         else:
             results_cache[sums] = cycle
         print("Part 2: ", cycle, sums)
-        #assert(sums == 96061)
-
+    assert(sums == 96061)
 
 #part_one()
 part_two()

@@ -22,6 +22,7 @@ def part_one():
             grid[(i, j)] = c
     maxx = i
 
+    # North
     for coo, s in grid.items():
         if s == "O":
             ii = 1
@@ -40,7 +41,7 @@ def part_one():
     print("Part 1: ", sums)
     assert(sums == 109665)
 
-def printer(grid):
+def grid_printer(grid):
     row = 0
     for coo, v in grid.items():
         r, c = coo
@@ -60,8 +61,11 @@ def part_two():
             grid[(i, j)] = c
     maxx = i
 
-    for hh in range(10000):
-        # N
+    results_cache = {}
+    #results_cache[tuple(lines)] = 0
+
+    for cycle in range(1e9):
+        # North
         for coo, s in grid.items():
             if s == "O":
                 ii = 1
@@ -73,7 +77,7 @@ def part_two():
                         ii += 1
                     else:
                         break
-        # W
+        # West
         for coo, s in sorted(grid.items(), key=lambda item: item[0][1]):
             if s == "O":
                 ii = 1
@@ -85,7 +89,7 @@ def part_two():
                         ii += 1
                     else:
                         break
-        # S
+        # South
         for coo, s in reversed(grid.items()):
             if s == "O":
                 ii = 1
@@ -97,7 +101,7 @@ def part_two():
                         ii += 1
                     else:
                         break
-        # E
+        # East
         for coo, s in reversed(sorted(grid.items(), key=lambda item: item[0][1])):
             if s == "O":
                 ii = 1
@@ -114,7 +118,12 @@ def part_two():
         for coo, s in grid.items():
             if s == "O":
                 sums += maxx - coo[0] + 1
-        print("Part 2: ", hh, sums)
+        if sums in results_cache:
+            cycle_len = cycle - results_cache[sums]
+        else:
+            results_cache[sums] = cycle
+        print("Part 2: ", cycle, sums)
+        #assert(sums == 96061)
 
 
 #part_one()

@@ -145,5 +145,18 @@ def dfs(group, sizes, num_done_in_group=0):
             else:
                 num_sols += lopploop5(group[1:], sizes)
     return num_sols
+
+def grid_printer(grid):
+    row = 0
+    for coo, v in grid.items():
+        r, c = coo
+        if r != row:
+            print()
+            row = r
+        print(v, end = "")
+
+    print()
+    print()
+    
 #part_one()
 #part_two()

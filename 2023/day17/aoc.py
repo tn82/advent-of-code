@@ -1,4 +1,5 @@
 import os
+import heapq
 
 day_path = os.path.dirname(__file__)
 
@@ -22,7 +23,7 @@ def part_one():
             if j > ymax:
                 ymax = j
 
-    q = [[(xmax, 0, "x", 0)]]
+    q = [(0, xmax, 0, "S", 0)]
     best_grid = {}
     best_global = 0
     
@@ -40,9 +41,10 @@ def part_one():
     best_global = 850
 
     while q:
-        path = q.pop()
-        sx, sy, sd, cost = path[-1]
+        cost, sx, sy, sd, count = q.pop()
         directions = ("L", "R") if sd in ("U", "D") else ("U", "D")
+        if sd == "S":
+            directions = ("R", "D")
         for d in directions:        
             if d == "L":
                 jx = 0
@@ -70,18 +72,14 @@ def part_one():
                 if cost + weight + sx + jx * i + (ymax - sy + jy * i) > best_global + 1:
                     continue
                 best_grid[(sx + jx * i, sy + jy * i, d)] = cost + weight
-                new_path = path + [(sx + jx * i, sy + jy * i, d, cost + weight)]
-                q.append(new_path)
+                #new_path = path + [(sx + jx * i, sy + jy * i, d, cost + weight)]
+                q.append((cost + weight, sx + jx * i, sy + jy * i, d, count + 1))
                 if sx + jx * i == 0 and sy + jy * i == ymax:
                     best_global = cost + weight
-                    print(len(new_path), len(q), cost + weight)
+                    print(count + 1, len(q), cost + weight)
 
-    #shortest_path_length = networkx.dijkstra_path_length(graph, (xmax, 0, "D"), (0, ymax, "L"))
-    #shortest_path = networkx.shortest_path(graph, (xmax, 0), (0, ymax), weight="yes")
-
-
-    print("Part 1: ", 0)
-    #assert(sums == 847) # high 848 off by one?
+    print("Part 1: ", best_global)
+    assert(best_global == 847) # high 848 off by one?
 
 def part_two():
     grid = {}

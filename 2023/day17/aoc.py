@@ -45,7 +45,20 @@ def part_one():
         directions = ("L", "R") if sd in ("U", "D") else ("U", "D")
         if sd == "S":
             directions = ("R", "D")
-        for d in directions:        
+
+        for d in ("L", "R", "D", "U"):
+            if d == sd:
+                continue
+            if sd == "L" and d == "R":
+                continue
+            if sd == "R" and d == "L":
+                continue
+            if sd == "U" and d == "D":
+                continue
+            if sd == "D" and d == "U":
+                continue
+            
+            #for d in directions:        
             if d == "L":
                 jx = 0
                 jy = -1
@@ -93,8 +106,6 @@ def part_two():
             if j > ymax:
                 ymax = j
 
-    #graph = networkx.DiGraph()
-    #litt = defaultdict(set)
     paths = [[(xmax, 0, "x", 0)]]
     q = [[(xmax, 0, "x", 0)]]
     best_grid = {}

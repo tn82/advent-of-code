@@ -157,6 +157,28 @@ def grid_printer(grid):
 
     print()
     print()
+
+# Add total length if 2D grid with end-point included
+def polygon_area(xy):
+    # A function to apply the Shoelace algorithm
+    sum1 = 0
+    sum2 = 0
     
-#part_one()
-#part_two()
+    for i in range(0, len(xy) - 1):
+        delta1 = 0
+        if xy[i][0] != 0 and xy[i+1][1] != 0:
+            delta1 = 0
+        sum1 += (xy[i][0] + delta1) * (xy[i+1][1] + delta1)
+        
+        delta2 = 0
+        if xy[i][1] != 0 and xy[i+1][0] != 0:
+            delta2 = 0
+        sum2 += (xy[i][1] + delta2) * (xy[i+1][0] + delta2)
+    
+    #Add xn.y1
+    sum1 += (xy[len(xy) - 1][0] + 0) * (xy[0][1] + 0)
+    #Add x1.yn
+    sum2 += (xy[0][0] + 0) * (xy[len(xy) - 1][1] + 0)
+    
+    area = abs(sum1 - sum2) / 2
+    return area

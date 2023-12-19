@@ -38,14 +38,10 @@ def part_one():
         best_global += grid[(x, y)]
         if x == 0 and y == ymax:
             break
-    best_global = 850
+    best_global = 849
 
     while q:
-        cost, sx, sy, sd, count = q.pop()
-        directions = ("L", "R") if sd in ("U", "D") else ("U", "D")
-        if sd == "S":
-            directions = ("R", "D")
-
+        cost, sx, sy, sd, count = heapq.heappop(q)
         for d in ("L", "R", "D", "U"):
             if d == sd:
                 continue
@@ -57,8 +53,7 @@ def part_one():
                 continue
             if sd == "D" and d == "U":
                 continue
-            
-            #for d in directions:        
+        
             if d == "L":
                 jx = 0
                 jy = -1
@@ -86,13 +81,15 @@ def part_one():
                     continue
                 best_grid[(sx + jx * i, sy + jy * i, d)] = cost + weight
                 #new_path = path + [(sx + jx * i, sy + jy * i, d, cost + weight)]
-                q.append((cost + weight, sx + jx * i, sy + jy * i, d, count + 1))
+                #q.append((cost + weight, sx + jx * i, sy + jy * i, d, count + 1))
+                heapq.heappush(q, (cost + weight, sx + jx * i, sy + jy * i, d, count + 1))
                 if sx + jx * i == 0 and sy + jy * i == ymax:
                     best_global = cost + weight
                     print(count + 1, len(q), cost + weight)
 
     print("Part 1: ", best_global)
     assert(best_global == 847) # high 848 off by one?
+
 
 def part_two():
     grid = {}
@@ -172,5 +169,5 @@ def part_two():
                     print(len(new_path), len(q), cost + weight)
 
 
-part_one()
-#part_two()
+part_one() # 847
+#part_two() # 997

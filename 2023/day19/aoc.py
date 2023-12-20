@@ -236,7 +236,6 @@ def count_recur(w_name, x, m, a, s, rules):
     wfs = rules[w_name]
 
     c = 0
-
     for r in wfs:
         if len(r) == 4:
             dest = r[3]
@@ -279,5 +278,5 @@ def part_two2():
     print("Part 2:", sums)
     assert(sums == 125455345557345)
 
-#part_one()
+part_one()
 part_two2()

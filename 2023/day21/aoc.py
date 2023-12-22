@@ -1,6 +1,8 @@
 import os
-from collections import defaultdict
-
+import time
+import copy
+import matplotlib.pyplot as plt 
+import numpy as np
 day_path = os.path.dirname(__file__)
 
 def input():
@@ -22,6 +24,23 @@ def grid_printer(grid):
 
     print()
     print()
+
+def parse():
+    ball_grid = {}
+    wall_grid = {}
+    xmax = 0
+    ymax = 0
+    for i, line in enumerate(input()):
+        for j, v in enumerate(line):
+            if v == "0":
+                ball_grid[(i, j)] = v
+            elif v == "#":
+                wall_grid[(i, j)] = v
+            if i > xmax:
+                xmax = i
+            if j > ymax:
+                ymax = j
+    return ball_grid, wall_grid, xmax, ymax
 
 def part_one():
     sums = 0
@@ -53,7 +72,7 @@ def part_one():
     print("Part 1: ", sums)
     assert(sums == 3737)
 
-def part_two(n):
+def part_two_slow(n):
     ball_grid = {}
     wall_grid = {}
     xmax = 0
@@ -99,33 +118,13 @@ def part_two(n):
     print("Part 2: ", len(ball_grid))
     return len(ball_grid)
 
-import time
-import copy
-def part_two2(n):
-    sums = 0
-    ball_grid = {}
-    wall_grid = {}
-    xmax = 0
-    ymax = 0
-    for i, line in enumerate(input()):
-        for j, v in enumerate(line):
-            if v == "0":
-                ball_grid[(i, j)] = v
-            elif v == "#":
-                wall_grid[(i, j)] = v
-            if i > xmax:
-                xmax = i
-            if j > ymax:
-                ymax = j
-    
+def counter(ball_grid, wall_grid, xmax, ymax, n):
+    res = []
     count_odd = len(ball_grid) # = 1
     count_even = 0
     wall_odd = copy.copy(ball_grid)
     wall_even = {}
-    #prev_ball_grid = {}
     now = time.time()
-    prev_odd = 0
-    prev_even = 0
     for s in range(n):
         grids = {}
         for coo, v in ball_grid.items():
@@ -146,45 +145,47 @@ def part_two2(n):
                             continue
                         grids[coos] = "0"
 
-        #prev_ball_grid = copy.copy(grids)
         if s % 2 == 0:
             count_even += len(grids)
-            #wall_even = copy.copy(grids)
             wall_even = grids
         else:
             count_odd += len(grids)
-            #wall_odd = copy.copy(grids)
             wall_odd = grids
-        #print("Even: ", count_even)
-        #print("Odd: ", count_odd)
-        #ball_grid = copy.copy(grids)
         ball_grid = grids
-        if s % 100 == 0:
-            #print("Iteration,", s, ",", time.time() - now, ",", len(grids), ",", count_even, ",", count_even - prev_even, ",", count_odd, ",", count_odd - prev_odd)
-            prev_even = count_even
-            prev_odd = count_odd
-            now = time.time()
-        #grid_printer(grid)
+        res.append(count_odd if s % 2 != 0 else count_even)
     #print("Even: ", count_even)
     #print("Odd: ", count_odd)
-    #print("Part 2: ", count_odd) # 3737 2665
-    print("n=", n, count_odd if n % 2 != 0 else count_even)
-    return count_odd if n % 2 != 0 else count_even
+    #print("n=", n, count_odd if n % 2 != 0 else count_even)
+    return res
 
+def part_two():
+    ball_grid, wall_grid, xmax, ymax = parse()
+    #res = counter(ball_grid, wall_grid, xmax, ymax, 65)
+    #plt.plot(res) 
+    #plt.savefig('part_two.png')
+    #part_one()
+    res = counter(ball_grid, wall_grid, xmax, ymax, 65 + 131 * 2)
+    k0 = res[65 + 131 * 0 - 1]
+    k1 = res[65 + 131 * 1 - 1]
+    k2 = res[65 + 131 * 2 - 1]
+    k0 = counter(ball_grid, wall_grid, xmax, ymax, 65 + 131 * 0)[-1] #2722
+    k1 = counter(ball_grid, wall_grid, xmax, ymax, 65 + 131 * 1)[-1] #25621
+    k2 = counter(ball_grid, wall_grid, xmax, ymax, 65 + 131 * 2)[-1] #71435
+    
+
+    vandermonde = np.matrix([[1, 0, 0], [1, 1, 1], [1, 2, 4]])
+    b = np.array([k0, k1, k2])
+    x = np.linalg.solve(vandermonde, b).astype(np.int64)
+
+    # note that 26501365 = 202300 * 131 + 65 where 131 is the dimension of the grid
+    n = 202300
+    part2 = x[0] + x[1] * n + x[2] * n * n
+    print("part 2:", part2)
+    assert(part2 == 625382480005896)
 
 #part_one()
-k0 = part_two(65 + 131 * 0) #2722
-k1 = part_two(65 + 131 * 1) #25621
-k2 = part_two(65 + 131 * 2) #71435
-import numpy as np
-
-vandermonde = np.matrix([[1, 0, 0], [1, 1, 1], [1, 2, 4]])
-b = np.array([k0, k1, k2])
-x = np.linalg.solve(vandermonde, b).astype(np.int64)
-
-# note that 26501365 = 202300 * 131 + 65 where 131 is the dimension of the grid
-n = 202300
-print("part 2:", x[0] + x[1] * n + x[2] * n * n)
+part_two()
 # 468883362047022 low
 # 468228516137765
 # 625382415472037 low
+# 625382480005896 

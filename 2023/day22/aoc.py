@@ -72,7 +72,7 @@ def move_to_stop(blocks, early_return):
 def part_one():
     sums = 0
     blocks = []
-    for i, line in enumerate(test()):
+    for i, line in enumerate(input()):
         coo0, coo1 = line.split("~")
         coo0 = [int(c) for c in coo0.split(",")]
         coo1 = [int(c) for c in coo1.split(",")]
@@ -81,29 +81,46 @@ def part_one():
     any_block_move = move_to_stop(blocks, False)
 
     for i, b in enumerate(blocks):
-        blocks_b = copy.copy(blocks)
+        blocks_b = copy.deepcopy(blocks)
         blocks_b.remove(b)
-        any_block_move = move_to_stop(blocks_b, False)
+        any_block_move = move_to_stop(blocks_b, True)
         if not any_block_move:
             sums += 1
         if i % 100 == 0:
             print("Iteration:", i, sums)
 
     print("Part 1: ", sums) # too high 522
-    #assert(sums == 0)
+    assert(sums == 409)
 
 
 def part_two():
     sums = 0
-    for i, line in enumerate(test()):
-        sums += int(line)
+    blocks = []
+    for i, line in enumerate(input()):
+        coo0, coo1 = line.split("~")
+        coo0 = [int(c) for c in coo0.split(",")]
+        coo1 = [int(c) for c in coo1.split(",")]
+        blocks.append((coo0, coo1))
+
+    any_block_move = move_to_stop(blocks, False)
+
+    for i, b in enumerate(blocks):
+        blocks_b = copy.deepcopy(blocks)
+        blocks_b.remove(b)
+        blocks_c = copy.deepcopy(blocks_b)
+        any_block_move = move_to_stop(blocks_c, False)
+        for b1, b2 in zip(blocks_b, blocks_c):
+            if b1 != b2:
+                sums += 1
+        if i % 100 == 0:
+            print("Iteration:", i, sums)
 
     print("Part 2: ", sums)
-    #assert(sums == 0)
+    #assert(sums == 409)
 
 
-part_one()
-#part_two()
+#part_one()
+part_two()
 
 
 

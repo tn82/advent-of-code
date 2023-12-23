@@ -137,13 +137,13 @@ def dfs(group, sizes, num_done_in_group=0):
     neighbours = ["A", "B"]
     for neighbour in neighbours:
         if neighbour == "#":
-            num_sols += lopploop5(group[1:], sizes, num_done_in_group + 1)
+            num_sols += dfs(group[1:], sizes, num_done_in_group + 1)
         else:
             if num_done_in_group:
                 if sizes and sizes[0] == num_done_in_group:
-                    num_sols += lopploop5(group[1:], sizes[1:])
+                    num_sols += dfs(group[1:], sizes[1:])
             else:
-                num_sols += lopploop5(group[1:], sizes)
+                num_sols += dfs(group[1:], sizes)
     return num_sols
 
 def grid_printer(grid):

@@ -1,0 +1,40 @@
+from scipy.optimize import fsolve
+import z3
+
+def input():
+    return "320870677764563, 335750934489987, 282502845957937 @ -40, -24, 10\n \
+219235623600942, 408022798608755, 245679379684914 @ 127, -45, 66\n \
+171834827764229, 225154401936948, 232302441670972 @ -122, -521, 95\n \
+399408000414510, 365475460204869, 325051385807860 @ -110, -35, -35\n \
+382531108862210, 229601570088564, 368913364777462 @ -119, 127, -107"
+
+def int_list(char_list):
+    return [int(c.strip()) for c in char_list.split(",")]
+
+def solve_z3():
+    pos_vel = []
+    for i, line in enumerate(input().split("\n")):
+        pos, vel = line.split("@")
+        pos = int_list(pos)
+        vel = int_list(vel)
+        pos_vel.append([pos, vel])
+
+    s = z3.Solver()
+    px, py, pz, vx, vy, vz = z3.Ints("px py pz vx vy vz")
+    times = [z3.Int("t" + str(i)) for i in range(5)]
+    for a in range(len(pos_vel)):
+        if a > 4:
+            break
+        ax, ay, az = pos_vel[a][0]
+        avx, avy, avz = pos_vel[a][1]
+        s.add(px + vx * times[a] == ax + avx * times[a])
+        s.add(py + vy * times[a] == ay + avy * times[a])
+        s.add(pz + vz * times[a] == az + avz * times[a])
+
+    s.check() # solve
+    sums = s.model().evaluate(px + py + pz)
+
+    print("Part 2: ", sums)
+    assert(sums == 557789988450159)
+
+solve_z3()

@@ -86,47 +86,29 @@ def part_one():
     print("Part 1: ", sums)
     assert(sums == 18184)
 
-
-from skspatial.objects import Line
-import numpy as np
-
-# Line(point=[24, 13, 10], direction=[-3, 1, 2]), 5, 3, 4
-def solve_point(vars):
-    x, y, z, xv, yv, zv, t1, t2, t3 = vars
-    #f = np.empty((9))
-    f = [0] * 9
-    f[0] = 19 - 2*t1 - x - xv*t1
-    f[1] = 18 - 1*t2 - x - xv*t2
-    f[2] = 20 - 2*t3 - x - xv*t3
-
-    f[3] = 13 + 1*t1 - y - yv*t1
-    f[4] = 19 - 1*t2 - y - yv*t2
-    f[5] = 25 - 2*t3 - y - yv*t3
-
-    f[6] = 30 - 2*t1 - z - zv*t1
-    f[7] = 22 - 2*t2 - z - zv*t2
-    f[8] = 34 - 4*t3 - z - zv*t3
-    return f
-
 def solve_point2(vars):
+    # Did not solve with fsolve
     x, y, z, xv, yv, zv, t1, t2, t3 = vars
     global pos_vel
     f = [0] * 9
 
-    px, py, pz = pos_vel[0][0]
-    pxv, pyv, pzv = pos_vel[0][1]
+    pi = 3
+    px, py, pz = pos_vel[pi][0]
+    pxv, pyv, pzv = pos_vel[pi][1]
     f[0] = px + pxv*t1 - x - xv*t1
     f[1] = py + pyv*t1 - y - yv*t1
     f[2] = pz + pzv*t1 - z - zv*t1
     
-    px, py, pz = pos_vel[1][0]
-    pxv, pyv, pzv = pos_vel[1][1]
+    pi = 4
+    px, py, pz = pos_vel[pi][0]
+    pxv, pyv, pzv = pos_vel[pi][1]
     f[3] = px + pxv*t2 - x - xv*t2
     f[4] = py + pyv*t2 - y - yv*t2
     f[5] = pz + pzv*t2 - z - zv*t2
 
-    px, py, pz = pos_vel[2][0]
-    pxv, pyv, pzv = pos_vel[2][1]
+    pi = 5
+    px, py, pz = pos_vel[pi][0]
+    pxv, pyv, pzv = pos_vel[pi][1]
     f[6] = px + pxv*t3 - x - xv*t3
     f[7] = py + pyv*t3 - y - yv*t3
     f[8] = pz + pzv*t3 - z - zv*t3
@@ -135,6 +117,7 @@ def solve_point2(vars):
 
 
 def solve_point3(vars):
+    # Did only solve with fsolve if a added 3 differernt points
     x, y, z, xv, yv, zv, _, __, ___ = vars
     global pos_vel
     f = [0] * 9
@@ -179,10 +162,11 @@ def solve_point3(vars):
 
 pos_vel = []
 from scipy.optimize import fsolve
+import z3
+
 def part_two():
     sums = 0
     global pos_vel
-    getcontext().prec = 24
     for i, line in enumerate(input()):
         pos, vel = line.split("@")
         pos = int_list(pos)
@@ -211,19 +195,41 @@ def part_two():
         if avz < 0 and az > zmax:
             zmax = az
 
-    start_guess = [24, 13, 10, -3, 1, 2]
-    start_guess = [24, 13, 10, 0, 0, 0]
     start_guess = [xmin, ymin, zmin, 0, 0, 0, 0, 0, 0]
-    ans = fsolve(solve_point3, start_guess, xtol = 1e-14)
-    print(ans)
+    ans = fsolve(solve_point3, start_guess, xtol = 1e-13)
     f = solve_point3(ans)
     x, y, z, xv, yv, zv, _, __, ___ = ans
-    sums = round(x, 0) + round(y, 0) + round(z, 0)
-    print(sums)
+    sums = int(round(x, 0) + round(y, 0) + round(z, 0))
     
-    print("Part 1: ", sums)
+    print("Part 2: ", sums)
     assert(sums == 557789988450159)
 
+def part_two_z3():
+    pos_vel = []
+    for i, line in enumerate(input()):
+        pos, vel = line.split("@")
+        pos = int_list(pos)
+        vel = int_list(vel)
+        pos_vel.append([pos, vel])
 
-#part_one()
+    s = z3.Solver()
+    px, py, pz, vx, vy, vz = z3.Ints("px py pz vx vy vz")
+    times = [z3.Int("t" + str(i)) for i in range(5)]
+    for a in range(len(pos_vel)):
+        if a > 4:
+            break
+        ax, ay, az = pos_vel[a][0]
+        avx, avy, avz = pos_vel[a][1]
+        s.add(px + vx * times[a] == ax + avx * times[a])
+        s.add(py + vy * times[a] == ay + avy * times[a])
+        s.add(pz + vz * times[a] == az + avz * times[a])
+
+    s.check()
+    sums = s.model().evaluate(px + py + pz)
+
+    print("Part 2: ", sums)
+    assert(sums == 557789988450159)
+
+part_one()
+part_two_z3()
 part_two()

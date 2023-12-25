@@ -21,6 +21,7 @@ def part_one():
     for i, line in enumerate(input()):
         c1, cs = line.split(":")
         for c in cs.split():
+            # hard coded links to remove from plot
             if c == "jjn" and c1 == "nhg" or c1 == "jjn" and c == "nhg":
                 continue
             if c == "lms" and c1 == "tmc" or c1 == "lms" and c == "tmc":
@@ -44,7 +45,7 @@ def part_one():
             if n in visited:
                 continue
             q.append(n)
-    print(len(visited))
+    tmd = len(visited)
     q = ["skv"]
     visited = set()
     while q:
@@ -54,12 +55,11 @@ def part_one():
             if n in visited:
                 continue
             q.append(n)
-    print(len(visited))
+    skv = len(visited)
 
-    nx.draw(graph, cmap = plt.get_cmap('jet'), with_labels=True )
-    plt.show()
-    print("Part 1: ", sums)
-
-    #assert(sums == 0)
+    #nx.draw(graph, cmap = plt.get_cmap('jet'), with_labels=True) # Plot to find the links we need to remove
+    #plt.show()
+    print("Part 1: ", tmd * skv)
+    assert(tmd * skv == 562912)
 
 part_one()

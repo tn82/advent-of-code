@@ -12,14 +12,14 @@ def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
 
-def grid_input():
-    with open(os.path.join(day_path, "input.txt"), "r") as file:
+def grid_input(name):
+    with open(os.path.join(day_path, name), "r") as file:
         grid = [list(r) for r in file.read().strip().split("\n")]
         n, m = len(grid), len(grid[0])
         return grid, n, m
 
-def grid_test():
-    with open(os.path.join(day_path, "test.txt"), "r") as file:
+def grid_input_dict(name):
+    with open(os.path.join(day_path, name), "r") as file:
         grid = [list(r) for r in file.read().strip().split("\n")]
         n, m = len(grid), len(grid[0])
         return grid, n, m
@@ -36,11 +36,10 @@ def part_one():
             if j > ymax:
                 ymax = j
 
-    long_grid = {}
     best_global = 0
     q = [[(xmax, 1, ".")]] # start
     while q:
-        path = heapq.heappop(q)
+        path = q.pop()
         x = path[-1][0]
         y = path[-1][1]
         d = path[-1][2]
@@ -66,14 +65,11 @@ def part_one():
                 continue
             new_path = path + [(x + sx, y + sy, grid[(x + sx, y + sy)])]
             
-            if (x + sx, y + sy) in long_grid and long_grid[(x + sx, y + sy)] > len(path):
-                continue
-            long_grid[(x + sx, y + sy, grid[(x + sx, y + sy)])] = len(new_path)
-            heapq.heappush(q, new_path)
-
             if x + sx == 0 and y + sy == ymax - 1 and len(new_path) > best_global:
                 best_global = len(new_path)
                 print(len(q), len(new_path))
+                continue
+            q.append(new_path)
     print("Part 1: ", best_global - 1)
     assert(best_global - 1 == 2214)
 
@@ -87,7 +83,7 @@ def coo_shifts(coo, grid, n, m):
     return coo_new
 
 def part_two():
-    grid, n, m = grid_input()
+    grid, n, m = grid_input("input.txt")
 
     # Find points with more than 2 directions
     nodes = set()
@@ -125,19 +121,70 @@ def part_two():
     q = [[(0, 1), 0, [(0, 1)]]] # start
     while q:
         node, dist, path = q.pop()
-        any = False
         for next_dist, next_node in graph[node]:
             if next_node in path:
                 continue
             if next_node == (n - 1, m - 2):
                 if dist + next_dist > best_global:
                     best_global = dist + next_dist
-                print(len(q), dist + next_dist, best_global)
+                    print(len(q), best_global)
                 continue
             q.append((next_node, dist + next_dist, path + [next_node]))
 
     print("Part 1: ", best_global)
     assert(best_global == 6594)
 
-part_one()
+def part_two_bad():
+    grid, n, m = grid_input("input.txt")
+
+    # Find points with more than 2 directions
+    nodes = set()
+    for x in range(n):
+        for y in range(m):
+            if grid[x][y] != "#":
+                if len(coo_shifts((x, y), grid, n, m)) > 2:
+                    nodes.add((x, y))
+    nodes.add((0, 1)) # start
+    nodes.add((n - 1, m - 2)) # goal
+
+    # Build graph with distance
+    graph = defaultdict(list)
+    for x, y in nodes:
+        q = []
+        q.append((x,y))
+        seen = {(x,y)}
+        dist = 0
+        while len(q) > 0:
+            # Step until we find another node
+            new_q = []
+            dist += 1
+            for coo in q:
+                for coos in coo_shifts(coo, grid, n, m):
+                    if coos not in seen:
+                        if coos in nodes:
+                            graph[(x, y)].append((dist, coos))
+                            seen.add(coos)
+                        else:
+                            seen.add(coos)
+                            new_q.append(coos)
+            q = new_q
+
+    best_global = 0
+    q = [[(0, 1), 0, [(0, 1)]]] # start
+    while q:
+        node, dist, path = q.pop()
+        for next_node in coo_shifts(node, grid, n, m):
+            if next_node in path:
+                continue
+            if next_node == (n - 1, m - 2):
+                if dist + 1 > best_global:
+                    best_global = dist + 1
+                    print(len(q), best_global)
+                continue
+            q.append((next_node, dist + 1, path + [next_node]))
+
+    print("Part 1: ", best_global)
+    assert(best_global == 6594)
+
+#part_one()
 part_two()

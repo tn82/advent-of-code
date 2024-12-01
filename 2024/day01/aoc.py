@@ -14,44 +14,38 @@ def test():
 def int_list(char_list):
     return [int(c) for c in char_list]
 
+def parse_input():
+    left = []
+    right = []
+    for _, line in enumerate(input()):
+        l, r = line.split()
+        left.append(int(l))
+        right.append(int(r))
+    left.sort()
+    right.sort()
+    return left, right
+
+
 def part_one():
     sums = 0
-    l = []
-    r = []
-    for i, line in enumerate(input()):
-        line = line.split()
-        #lis = int_list(line)
-        l.append(int(line[0]))
-        r.append(int(line[1]))
-    l.sort()
-    r.sort()
+    left, right = parse_input()
 
-    for a, b in zip(l, r):
-        sums += abs(a - b)
-
+    for l, r in zip(left, right):
+        sums += abs(l - r)
 
     print("Part 1: ", sums)
-    #assert(sums == 0)
+    assert(sums == 3508942)
 
 
 def part_two():
     sums = 0
-    l = []
-    r = []
-    for i, line in enumerate(input()):
-        line = line.split(" ")
-        #lis = int_list(line)
-        l.append(int(line[0]))
-        r.append(int(line[3]))
-    l.sort()
-    r.sort()
+    left, right = parse_input()
 
-    for a in l:
-        sums += r.count(a) * a
-
+    for l in left:
+        sums += right.count(l) * l
 
     print("Part 2: ", sums)
-    #assert(sums == 0)
+    assert(sums == 26593248)
 
 
 part_one()

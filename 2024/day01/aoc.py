@@ -16,8 +16,19 @@ def int_list(char_list):
 
 def part_one():
     sums = 0
-    for i, line in enumerate(test()):
-        sums += int(line)
+    l = []
+    r = []
+    for i, line in enumerate(input()):
+        line = line.split()
+        #lis = int_list(line)
+        l.append(int(line[0]))
+        r.append(int(line[1]))
+    l.sort()
+    r.sort()
+
+    for a, b in zip(l, r):
+        sums += abs(a - b)
+
 
     print("Part 1: ", sums)
     #assert(sums == 0)
@@ -25,12 +36,23 @@ def part_one():
 
 def part_two():
     sums = 0
-    for i, line in enumerate(test()):
-        sums += int(line)
+    l = []
+    r = []
+    for i, line in enumerate(input()):
+        line = line.split(" ")
+        #lis = int_list(line)
+        l.append(int(line[0]))
+        r.append(int(line[3]))
+    l.sort()
+    r.sort()
+
+    for a in l:
+        sums += r.count(a) * a
+
 
     print("Part 2: ", sums)
     #assert(sums == 0)
 
 
 part_one()
-#part_two()
+part_two()

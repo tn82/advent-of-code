@@ -3,16 +3,20 @@ from collections import defaultdict
 
 day_path = os.path.dirname(__file__)
 
+
 def input():
     with open(os.path.join(day_path, "input.txt"), "r") as file:
         return [line.rstrip() for line in file]
+
 
 def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
 
+
 def int_list(char_list):
     return [int(c) for c in char_list]
+
 
 def parse_input():
     left = []
@@ -34,7 +38,7 @@ def part_one():
         sums += abs(l - r)
 
     print("Part 1: ", sums)
-    assert(sums == 3508942)
+    assert sums == 3508942
 
 
 def part_two():
@@ -45,7 +49,7 @@ def part_two():
         sums += right.count(l) * l
 
     print("Part 2: ", sums)
-    assert(sums == 26593248)
+    assert sums == 26593248
 
 
 part_one()

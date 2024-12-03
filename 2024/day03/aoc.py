@@ -11,7 +11,7 @@ def input_raw():
 
 def part_one():
     sums = 0
-    message = re.findall(r"(mul\(\d+,\s*\d+\))", input_raw())
+    message = re.findall(r"(mul\(\d+,\d+\))", input_raw())
     for op in message:
         dig = re.findall(r"(\d+)", op)
         sums += int(dig[0]) * int(dig[1])
@@ -22,7 +22,7 @@ def part_one():
 
 def part_two():
     sums = 0
-    message = re.findall(r"(mul\(\d+,\s*\d+\)|do\(\)||don't\(\))", input_raw())
+    message = re.findall(r"(mul\(\d+,\d+\)|do\(\)||don't\(\))", input_raw())
     active = True
     for op in message:
         if not op:

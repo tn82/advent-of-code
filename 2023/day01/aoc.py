@@ -11,7 +11,7 @@ def input_test():
 
 def part_one():
     sum = 0
-    for line in input():
+    for line in input_test():
         tens = 0
         for c in line:
             if c.isdigit():
@@ -29,7 +29,7 @@ digges = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
 
 def part_two():
     sum = 0
-    for line in input():
+    for line in input_test():
         tens = 0
         for i, c in enumerate(line):
             line_strip = line[i:]

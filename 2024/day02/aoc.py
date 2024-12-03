@@ -1,5 +1,4 @@
 import copy
-from itertools import pairwise
 import os
 from collections import defaultdict
 

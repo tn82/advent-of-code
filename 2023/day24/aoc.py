@@ -1,5 +1,6 @@
 import os
 from collections import defaultdict
+from decimal import *
 
 day_path = os.path.dirname(__file__)
 
@@ -13,8 +14,6 @@ def test():
 
 def int_list(char_list):
     return [int(c.strip()) for c in char_list.split(",")]
-
-from decimal import *
 
 def line_conv(p1, p2):
     A = (p1[1] - p2[1])

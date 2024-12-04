@@ -18,57 +18,79 @@ def int_list(char_list):
     return [int(c) for c in char_list]
 
 
-dirs = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
-
-def se(grid, row, col, dir):
-    row1 = row
-    col1 = col
+def part1(grid, row, col, dir):
     rd, cd = dir
-    if (row1, col1) in grid and grid[(row1, col1)] == "X":
-        row1 += rd
-        col1 += cd
-        if (row1, col1) in grid and grid[(row1, col1)] == "M":
-            row1 += rd
-            col1 += cd
-            if (row1, col1) in grid and grid[(row1, col1)] == "A":
-                row1 += rd
-                col1 += cd
-                if (row1, col1) in grid and grid[(row1, col1)] == "S":
+    if (row, col) in grid and grid[(row, col)] == "X":
+        row += rd
+        col += cd
+        if (row, col) in grid and grid[(row, col)] == "M":
+            row += rd
+            col += cd
+            if (row, col) in grid and grid[(row, col)] == "A":
+                row += rd
+                col += cd
+                if (row, col) in grid and grid[(row, col)] == "S":
                     return True
     return False
+
+
+def part2(grid, row, col, dir):
+    rd, cd = dir
+    row_orig = row
+    col_orig = col
+    if (row, col) in grid and grid[(row, col)] == "M":
+        row += rd
+        col += cd
+        if (row, col) in grid and grid[(row, col)] == "A":
+            row += rd
+            col += cd
+            if (row, col) in grid and grid[(row, col)] == "S":
+                if (row_orig, col) in grid and grid[(row_orig, col)] == "S":
+                    if (row, col_orig) in grid and grid[(row, col_orig)] == "M":
+                        return True
+                if (row_orig, col) in grid and grid[(row_orig, col)] == "M":
+                    if (row, col_orig) in grid and grid[(row, col_orig)] == "S":
+                        return True
+    return False
+
 
 def part_one():
     sums = 0
     grid = {}
-    cols = 0
-    rows = 0
-    for row, line in enumerate(test()):
+    for row, line in enumerate(input()):
         for col, c in enumerate(line):
             grid[(row, col)] = c
-            if row > rows:
-                rows = row
-            if col > cols:
-                cols = col
 
-    xmas = "XMAS"
-    for row in range(rows+1):
-        for col in range(cols+1):
-            for dir in dirs:
-                if se(grid, col, row, dir):
+    print(row, col)
+    directions8 = ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1))
+    for r in range(row + 1):
+        for c in range(col + 1):
+            for dir in directions8:
+                if part1(grid, c, r, dir):
                     sums += 1
 
     print("Part 1: ", sums)
-    # assert(sums == 0)
+    assert sums == 2447
 
 
 def part_two():
     sums = 0
-    for i, line in enumerate(test()):
-        sums += int(line)
+    grid = {}
+    for row, line in enumerate(input()):
+        for col, c in enumerate(line):
+            grid[(row, col)] = c
 
+    dirs_diag = [(1, 1), (-1, -1), (1, -1), (-1, 1)]
+    for r in range(row + 1):
+        for c in range(col + 1):
+            for dir in dirs_diag:
+                if part2(grid, c, r, dir):
+                    sums += 1
+
+    sums = int(sums / 2)
     print("Part 2: ", sums)
-    # assert(sums == 0)
+    assert sums == 1868
 
 
 part_one()
-# part_two()
+part_two()

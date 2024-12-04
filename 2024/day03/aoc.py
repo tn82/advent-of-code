@@ -22,7 +22,7 @@ def part_one():
 
 def part_two():
     sums = 0
-    message = re.findall(r"(mul\(\d+,\d+\)|do\(\)||don't\(\))", input_raw())
+    message = re.findall(r"(mul\(\d+,\d+\)|do\(\)|don't\(\))", input_raw())
     active = True
     for op in message:
         if not op:

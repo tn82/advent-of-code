@@ -6,4 +6,5 @@
 *.swp
 venv*/*
 input.txt
+input*.txt
 *Zone.Identifier

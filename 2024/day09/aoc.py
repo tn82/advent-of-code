@@ -100,7 +100,6 @@ def part_two():
                     ri += 1
             except ValueError:
                 print(parsed)
-            parsed.index(".")
 
     for i, p in enumerate(parsed):
         if p == ".":

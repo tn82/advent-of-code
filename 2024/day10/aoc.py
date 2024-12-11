@@ -50,9 +50,9 @@ def bfs(grid, r, c, find_unique, result):
             rj, cj = jump
             if find_unique and (rq + rj, cq + cj) in visited:
                 continue
-            if (rq + rj, cq + cj) in grid and grid[(rq + rj, cq + cj)] == grid[
-                (rq, cq)
-            ] + 1:
+            if (rq + rj, cq + cj) not in grid:
+                continue
+            if grid[(rq + rj, cq + cj)] == grid[(rq, cq)] + 1:
                 visited.add((rq + rj, cq + cj))
                 queue.append((rq + rj, cq + cj))
 

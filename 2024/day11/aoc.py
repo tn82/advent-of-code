@@ -3,21 +3,6 @@ from functools import cache
 
 day_path = os.path.dirname(__file__)
 
-
-def input():
-    with open(os.path.join(day_path, "input.txt"), "r") as file:
-        return [line.rstrip() for line in file]
-
-
-def test():
-    with open(os.path.join(day_path, "test.txt"), "r") as file:
-        return [line.rstrip() for line in file]
-
-
-def int_list(char_list):
-    return [int(c) for c in char_list]
-
-
 @cache
 def counter(s, i, break_i):
     if i == break_i:
@@ -38,32 +23,11 @@ def counter(s, i, break_i):
 def part_one():
     sums = 0
     stones = [4329, 385, 0, 1444386, 600463, 19, 1, 56615]
-    # stones = [125,17]
-    stones = [4329]
-    res = []
-    for x in range(8):
-        cd = 0
-        for i, s in enumerate(stones):
-            ss = str(s)
-            if s == 0:
-                res.append(1)
-            elif len(ss) % 2 == 0:
-                middle = len(ss) // 2
-                res.append(int(ss[:middle]))
-                res.append(int(ss[middle:]))
-                cd += 1
-                # las = int(ss[middle:])
-                # if las:
-                #    res.append(las)
-            else:
-                res.append(s * 2024)
-        stones = res
-        print(res)
-        res = []
-        # print(len(stones))
+    for s in stones:
+        sums += counter(s, 0, 25)
 
-    print("Part 1: ", len(res))
-    # assert(sums == 0)
+    print("Part 1: ", sums)
+    assert(sums == 218079)
 
 
 def part_two():
@@ -73,8 +37,8 @@ def part_two():
         sums += counter(s, 0, 75)
 
     print("Part 2: ", sums)
-    # assert(sums == 0)
+    assert(sums == 259755538429618)
 
 
-# part_one()
+part_one()
 part_two()

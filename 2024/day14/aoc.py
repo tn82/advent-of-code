@@ -4,16 +4,20 @@ from time import sleep
 
 day_path = os.path.dirname(__file__)
 
+
 def input():
     with open(os.path.join(day_path, "input.txt"), "r") as file:
         return [line.rstrip() for line in file]
+
 
 def test():
     with open(os.path.join(day_path, "test.txt"), "r") as file:
         return [line.rstrip() for line in file]
 
+
 def int_list(char_list):
     return [int(c) for c in char_list]
+
 
 def part_one():
     sums = 0
@@ -30,10 +34,10 @@ def part_one():
         velo.append((int(v3), int(v4)))
 
     xs = 101
-    #xs = 11
+    # xs = 11
 
     ys = 103
-    #ys = 7
+    # ys = 7
 
     for t in range(100):
         pointsn = []
@@ -42,7 +46,7 @@ def part_one():
             yn = (p[1] + v[1]) % ys
             pointsn.append((xn, yn))
         points = pointsn
-    
+
     q1, q2, q3, q4 = 0, 0, 0, 0
     for p in points:
         if p[0] < xs / 2 - 1 and p[1] < ys / 2 - 1:
@@ -54,10 +58,8 @@ def part_one():
         elif p[0] > xs / 2 and p[1] > ys / 2:
             q4 += 1
 
-    
-
-    print("Part 1: ", q1 * q2 *q3 * q4)
-    #assert(sums == 218295000) # 79600140
+    print("Part 1: ", q1 * q2 * q3 * q4)
+    assert q1 * q2 * q3 * q4 == 218295000
 
 
 def grid_printer(grid):
@@ -72,19 +74,20 @@ def grid_printer(grid):
     print()
     print()
 
-def printer(xs, ys, points):
+
+def printer(points):
+    max_x = max(coord[0] for coord in points)
+    max_y = max(coord[1] for coord in points)
     grid = []
-    for y in range(ys):
-        grid.append("."*xs)
-        #for y in range(ys):
-        #    grid[(x, y)] = ""
+    for _ in range(max_y + 1):
+        grid.append("." * (max_x + 1))
     for p in points:
-        s = grid[p[0]]
-        #grid[p[0]][p[1]] = "#"
-        s = s[:p[1]] + "#" + s[p[1]+1:]
-        grid[p[0]] = s
+        s = grid[p[1]]
+        s = s[: p[0]] + "#" + s[p[0] + 1 :]
+        grid[p[1]] = s
     for g in grid:
         print(g)
+
 
 def part_two():
     points = []
@@ -100,12 +103,8 @@ def part_two():
         velo.append((int(v3), int(v4)))
 
     xs = 101
-    #xs = 11
-
     ys = 103
-    #ys = 7
-
-    for t in range(17272):
+    for t in range(10000):
         pointsn = []
         for p, v in zip(points, velo):
             xn = (p[0] + v[0]) % xs
@@ -113,27 +112,17 @@ def part_two():
             pointsn.append((xn, yn))
         points = pointsn
 
-        q1, q2, q3, q4 = 0, 0, 0, 0
+        q_middle = 0
         for p in points:
-            if p[0] < xs / 4 - 1 and p[1] < ys / 4 - 1:
-                q1 += 1
-            elif p[0] < xs / 2 - 1 and p[1] > ys / 2:
-                q2 += 1
-            elif p[0] > xs / 2 and p[1] < ys / 2 - 1:
-                q3 += 1
-            elif p[0] > xs / 2 and p[1] > ys / 2:
-                q4 += 1
+            if xs / 3 < p[0] < xs * 2 / 3 and ys / 3 < p[1] < ys * 2 / 3:
+                q_middle += 1
 
-        #if 1.8*(q1 + q2) < q3 + q4:
-        if 5 * q1 < 500 / 16:
-            printer(xs, ys, points)
-            print(t)
-    
+        if q_middle > len(points) / 2:
+            printer(points)
+            break
 
-
-
-    print("Part 2: ", 0)
-    #assert(sums == 6870) 17272 = high 6869 = low
+    print("Part 2: ", t + 1)
+    assert(t + 1 == 6870)
 
 
 part_one()

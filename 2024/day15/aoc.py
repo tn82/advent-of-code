@@ -97,22 +97,9 @@ def part_one():
     print("Part 1: ", sums)
     assert sums == 1515788
 
-
+# Move multple blocks
+# Move tetris block if not blocked
 def part_two():
-    sums = 0
-
-    def grid_printer(grid):
-        row = 0
-        for coo, v in grid.items():
-            x, y = coo
-            if y != row:
-                print()
-                row = y
-            print(v, end="")
-
-        print()
-        print()
-
     sums = 0
     grid2 = {}
     rx, ry = 0, 0
@@ -143,34 +130,34 @@ def part_two():
     grid_printer(grid)
     for c in moves.replace("\n", ""):
         dx, dy = move_xy(c)
-        print("Move " + c + ":")
+        #print("Move " + c + ":")
 
-        c2m = [(rx, ry)]
+        coo_list = [(rx, ry)]
         i = 0
-        impos = False
-        while i < len(c2m):
-            x, y = c2m[i]
+        do_move = True
+        while i < len(coo_list):
+            x, y = coo_list[i]
             nx, ny = x + dx, y + dy
             if grid[(nx, ny)] in "O[]":
-                if (nx, ny) not in c2m:
-                    c2m.append((nx, ny))
+                if (nx, ny) not in coo_list:
+                    coo_list.append((nx, ny))
                 if grid[(nx, ny)] == "[":
-                    if (nx + 1, ny) not in c2m:
-                        c2m.append((nx + 1, ny))
+                    if (nx + 1, ny) not in coo_list:
+                        coo_list.append((nx + 1, ny))
                 if grid[(nx, ny)] == "]":
-                    if (nx - 1, ny) not in c2m:
-                        c2m.append((nx - 1, ny))
+                    if (nx - 1, ny) not in coo_list:
+                        coo_list.append((nx - 1, ny))
             elif grid[(nx, ny)] == "#":
-                impos = True
+                do_move = False
                 break
             i += 1
-        if impos:
+        if not do_move:
             continue
 
         new_grid = copy.copy(grid)
-        for x, y in c2m:
+        for x, y in coo_list:
             new_grid[(x, y)] = "."
-        for x, y in c2m:
+        for x, y in coo_list:
             new_grid[(x + dx, y + dy)] = grid[(x, y)]
 
         grid = new_grid
@@ -179,7 +166,7 @@ def part_two():
         ry += dy
 
         #grid_printer(grid)
-        print(rx, ry)
+        #print(rx, ry)
 
     for coo, v in grid.items():
         if v in "O[":

@@ -1,17 +1,7 @@
 import heapq
 
 def dijkstra(graph, start):
-  """
-  Computes the shortest distances from a starting node to all other nodes in a graph.
 
-  Args:
-    graph: A dictionary representing the graph where keys are nodes and 
-           values are dictionaries mapping neighbors to edge weights.
-    start: The starting node for computing shortest paths.
-
-  Returns:
-    A dictionary mapping nodes to their shortest distances from the start node.
-  """
 
   distances = {node: float('inf') for node in graph}
   distances[start] = 0
@@ -48,3 +38,90 @@ start_node = 'A'
 shortest_distances = dijkstra(graph, start_node)
 
 print(f"Shortest distances from node {start_node}: {shortest_distances}")
+
+
+def clockwise(x, y):
+    return (y, -x)
+
+def counter_clockwise(x, y):
+    return (-y, x)
+
+def neighbor_weights(grid, curr_node):
+    nw = []
+    x, y, dx, dy = curr_node
+    if grid[(curr_node[0] + dx, curr_node[1] + dy)] != "#":
+        # Move +dx +dy. Keep direction the same.
+        weight = 1
+        nw.append(((x + dx, y + dy, dx, dy), weight))
+    weight = 1000       
+    # No move only spin
+    dx_cc, dy_cc = counter_clockwise(dx, dy)
+    nw.append(((x, y, dx_cc, dy_cc), weight))
+
+    # No move only spin
+    dx_c, dy_c = clockwise(dx, dy)
+    nw.append(((x, y, dx_c, dy_c), weight))
+    return nw
+
+def dijkstra_grid_single_path(grid, start, end):
+    distances = {}
+    distances[start] = 0
+    priority_queue = [(0, start)]  # (distance, node)
+    previous_nodes = {}
+    previous_nodes[start] = None
+
+    while priority_queue:
+        current_distance, current_node = heapq.heappop(priority_queue)
+
+        if (current_node[0], current_node[1]) == end:
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = previous_nodes[current_node]
+            return current_distance, path[::-1]  # Reverse the path
+
+        if current_distance > distances[current_node]:
+            continue
+
+        for neighbor, weight in neighbor_weights(grid, current_node):
+            distance = current_distance + weight
+            if neighbor not in distances or distance < distances[neighbor]:
+                distances[neighbor] = distance
+                previous_nodes[neighbor] = current_node
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return float("inf"), []  # No path found
+
+input_raw = "\
+###############\n\
+#.......#....E#\n\
+#.#.###.#.###.#\n\
+#.....#.#...#.#\n\
+#.###.#####.#.#\n\
+#.#.#.......#.#\n\
+#.#.#####.###.#\n\
+#...........#.#\n\
+###.#.#####.#.#\n\
+#...#.....#.#.#\n\
+#.#.#.###.#.#.#\n\
+#.....#...#.#.#\n\
+#.###.#.#.#.#.#\n\
+#S..#.....#...#\n\
+###############"
+
+sx, sy = 0, 0
+ex, ey = 0, 0
+grid = {}
+# for y, line in enumerate(test_raw().split("\n")):
+for y, line in enumerate(input_raw.split("\n")):
+    for x, c in enumerate(line):
+        grid[(x, y)] = c
+        if c == "S":
+            sx = x
+            sy = y
+        if c == "E":
+            ex = x
+            ey = y
+
+distances, paths = dijkstra_grid_single_path(grid, (sx, sy, 1, 0), (ex, ey))
+print(distances)

@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 import heapq
 import copy
+from functools import cache
 
 day_path = os.path.dirname(__file__)
 

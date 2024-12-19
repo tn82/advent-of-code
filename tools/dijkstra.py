@@ -46,6 +46,16 @@ def clockwise(x, y):
 def counter_clockwise(x, y):
     return (-y, x)
 
+def neighbor_weights_simple(grid, current_node):
+    nw = []
+    x, y = current_node
+    for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+        neighbor = x + dx, y + dy
+        if (neighbor) not in grid or grid[(neighbor)] == "#":
+            continue
+        nw.append((neighbor, 1))
+    return nw
+
 def neighbor_weights(grid, curr_node):
     nw = []
     x, y, dx, dy = curr_node

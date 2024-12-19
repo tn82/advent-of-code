@@ -102,8 +102,6 @@ def part_one():
     b = 0
     c = 0
     prog = [2,4,1,6,7,5,4,6,1,4,5,5,0,3,3,0]
-    
-
     res = []
     i = 0
     add2 = False
@@ -152,13 +150,11 @@ def part_one():
             c = math.trunc(float(a) / math.pow(2, combo))
         else:
             print("Error > 7")
-    rr = ""
-    for r in res:
-        rr += str(r) + ","
-    sums = rr # 236216121 wrong
+            
+    result_string = ",".join(map(str, res))
 
-    print("Part 1: ", sums)
-    assert(sums == "2,3,6,2,1,6,1,2,1,")
+    print("Part 1: ", result_string)
+    assert(result_string == "2,3,6,2,1,6,1,2,1,")
 
 part_one()
-part_two()
+#part_two()

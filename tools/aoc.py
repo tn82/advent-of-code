@@ -203,3 +203,7 @@ def polygon_area(xy):
 
     area = abs(sum1 - sum2) / 2
     return area
+
+# join list to comma string
+res = [1,2,3]
+result_string = ",".join(map(str, res))

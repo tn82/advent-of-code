@@ -73,6 +73,16 @@ def neighbor_weights(grid, curr_node):
     nw.append(((x, y, dx_c, dy_c), weight))
     return nw
 
+def neighbor_weights_simple(grid, current_node):
+    nw = []
+    x, y = current_node
+    for dx, dy in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+        neighbor = x + dx, y + dy
+        if (neighbor) not in grid or grid[(neighbor)] == "#":
+            continue
+        nw.append((neighbor, 1))
+    return nw
+    
 def dijkstra_grid_single_path(grid, start, end):
     distances = {}
     distances[start] = 0

@@ -84,5 +84,5 @@ def part_two():
     assert(sums == 1986)
 
 
-#part_one()
+part_one()
 part_two()

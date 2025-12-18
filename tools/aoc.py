@@ -119,10 +119,6 @@ def driver():
     res = bfs(visited, queue, graph, "5")  # function calling
     print("Res: ", res)
 
-    # Driver Code
-    print("Breadth-First Search")
-    res = bfs(visited, queue, graph, "5")  # function calling
-    print("Res: ", res)
 
 
 driver()
